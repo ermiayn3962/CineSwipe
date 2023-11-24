@@ -3,15 +3,14 @@ const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
+const URI = require('./configure.js')
 
 app.use(express.urlencoded({ extended: false }));
 
 /* Connecting to DATABASE */
-const uri = URI;
-
 async function connect() {
     try {
-        await mongoose.connect(uri, {dbName: 'filmQ'});
+        await mongoose.connect(URI.URI, {dbName: 'filmQ'});
         console.log("Connect to MongoDB");
     } catch (error) {
         console.log(error);
