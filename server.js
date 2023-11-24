@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 app.use(express.urlencoded({ extended: false }));
 
 /* Connecting to DATABASE */
-const uri = 'mongodb+srv://yodaermias:Breeze33@cluster0.yqiay1g.mongodb.net/?retryWrites=true&w=majority';
+const uri = '';
 
 async function connect() {
     try {
