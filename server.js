@@ -3,15 +3,17 @@ const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
-const URI = require('./configure.js')
+const secrets = require('./configure.js');
+const passport = require('passport');
+const flash = require('express-flash');
+const session = require('express-session');
 
-app.use(express.urlencoded({ extended: false }));
 
 /* Connecting to DATABASE */
 async function connect() {
     try {
-        await mongoose.connect(URI.URI, {dbName: 'filmQ'});
-        console.log("Connect to MongoDB");
+        await mongoose.connect(secrets.URI, {dbName: 'filmQ'});
+        console.log("Connected to MongoDB");
     } catch (error) {
         console.log(error);
     }
@@ -30,21 +32,55 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-/* Pages */
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/views/index.html')
+/* Initialize passport */
+const initializePassport = require('./passport-config.js');
+initializePassport(
+    passport, 
+    async email => { 
+        console.log("inside parameter getUserByEmail")
+        console.log(email)
+        // console.log(await User.findOne({email: email}))
+        return await User.findOne({email: email})
+    },
+    async id => {
+        
+        console.log('this is the user by id')
+        // console.log(await User.findById({id: id}))
+        return await User.findOne({id: id})
+    }
+    );
+    
+    app.engine('html', require('ejs').renderFile);
+    app.use(express.urlencoded({ extended: false }));
+    app.use(flash());
+    app.use(session({
+        secret: secrets.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false
+    }));
+    app.use(passport.initialize());
+    app.use(passport.session());
+    
+    
+    /* Pages */
+app.get('/', async (req, res) => {
+        const user = await req.user;
+    res.render(__dirname + '/views/index.html', {name: user.name})
 })
 
 app.get('/login', (req, res) => {
-    res.sendFile(__dirname + '/views/login.html')
+    res.render(__dirname + '/views/login.html')
 })
 
-app.post('/login', (req, res) => {
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+}))
 
-})
 
 app.get('/signup', (req, res) => {
-    res.sendFile(__dirname + '/views/signup.html')
+    res.render(__dirname + '/views/signup.html')
 })
 
 // Adding user information to database
