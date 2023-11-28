@@ -1,29 +1,23 @@
+/* Importing packages */
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-
-// const localStrategy = require('passport-local').Strategy;
 
 
 function initialize(passport, getUserByEmail, getUserById)
 {
-    console.log('inside initializePassport')
+    /* Authenticates the user information provided */
     const authenticateUser = async (email, password, done) => {
         const user = await getUserByEmail(email);
-        console.log('user from getUserByEmail', user)
 
+        /* Checking if information provided match in DB */
         if (user == null) {
-            console.log('no user')
             return done(null, false, { message : 'No user with that email'})
         }
 
         try {
             if (await bcrypt.compare(password, user.password)) {
-                console.log('correct')
-
                 return done(null, user)
             } else {
-                console.log('no password')
-
                 return done(null, false, {message: 'Password incorrect'});
             }
         } catch (error) {
