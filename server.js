@@ -9,7 +9,7 @@ const flash = require('express-flash');
 const session = require('express-session');
 
 
-/* Connecting to DATABASE */
+/* Connecting to database */
 async function connect() {
     try {
         await mongoose.connect(secrets.URI, {dbName: 'filmQ'});
@@ -36,40 +36,36 @@ const User = mongoose.model('User', userSchema);
 const initializePassport = require('./passport-config.js');
 initializePassport(
     passport, 
-    async email => { 
-        console.log("inside parameter getUserByEmail")
-        console.log(email)
-        // console.log(await User.findOne({email: email}))
-        return await User.findOne({email: email})
-    },
-    async id => {
-        
-        console.log('this is the user by id')
-        // console.log(await User.findById({id: id}))
-        return await User.findOne({id: id})
-    }
-    );
-    
-    app.engine('html', require('ejs').renderFile);
-    app.use(express.urlencoded({ extended: false }));
-    app.use(flash());
-    app.use(session({
-        secret: secrets.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: false
-    }));
-    app.use(passport.initialize());
-    app.use(passport.session());
+    async email => await User.findOne({email: email}),
+    async id => await User.findOne({id: id})
+);
+
+/* Setting app uses */
+app.engine('html', require('ejs').renderFile);
+app.use(express.urlencoded({ extended: false }));
+app.use(flash());
+app.use(session({
+    secret: secrets.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
+app.use((req, res, next) => {
+    res.locals.message = req.flash();
+    next();
+})
+app.use(passport.initialize());
+app.use(passport.session());
     
     
-    /* Pages */
+/* Pages */
 app.get('/', async (req, res) => {
-        const user = await req.user;
+    const user = await req.user;
     res.render(__dirname + '/views/index.html', {name: user.name})
 })
 
 app.get('/login', (req, res) => {
-    res.render(__dirname + '/views/login.html')
+    
+    res.render(__dirname + '/views/login.html', {messages: res.locals.message})
 })
 
 app.post('/login', passport.authenticate('local', {
@@ -95,13 +91,20 @@ app.post('/signup', async (req, res) => {
             password: hashedPassword
         })
 
-        db.collection('users').insertOne(data, (error, collection) => {
-            if (error) {
-                throw error;
-            } else {
-                console.log("User inserted to DB successfully");
-            }
-        });
+        /* Checking if user already exists */
+        user = await User.findOne({email : data.email});
+
+        if (user == null) {
+            db.collection('users').insertOne(data, (error, collection) => {
+                if (error) {
+                    throw error;
+                } else {
+                    console.log("User inserted to DB successfully");
+                }
+            });
+        } else {
+            req.flash('error', 'User already exists');
+        }
 
         res.redirect('/login');
     } catch {
