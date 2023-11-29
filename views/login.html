@@ -56,7 +56,10 @@
 
   <body>
     <h1>Login</h1>
-
+    <!-- Using ejs library in backend to render error message -->
+    <% if (messages.error) { %>
+        <%= messages.error %>
+      <% } %>
     <form
       action="/login"
       method="post">
