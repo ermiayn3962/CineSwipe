@@ -1,0 +1,248 @@
+* {
+  margin: 0px;
+}
+/* header {
+        -webkit-box-align: center;
+        align-items: center;
+        box-shadow: rgba(0, 0, 0, 0) 0px 8px 24px;
+        display: flex;
+        height: 80px;
+        -webkit-box-pack: center;
+        justify-content: center;
+        position: sticky;
+        top: 0px;
+        width: 100vw;
+        z-index: 300;
+      } */
+body {
+  background-color: black;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 15px;
+  text-align: center;
+  position: relative;
+}
+
+.center-item {
+  display: inline-block;
+}
+
+.left-item,
+.right-item {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.left-item {
+  left: 15px;
+}
+#search {
+  color: red;
+  width: 400px;
+}
+
+.right-item {
+  right: 15px;
+}
+
+.random-big {
+  height: 700px;
+  width: 100%;
+  background-color: #00ffff67;
+}
+
+h2 {
+  display: block;
+  justify-content: center;
+}
+
+h1 {
+  color: white;
+}
+
+.movies-wrapper {
+  display: flex;
+  overflow-x: auto;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  scroll-snap-type: x mandatory;
+}
+.movie {
+  flex: 0 0 auto; /* Don't grow or shrink, maintain original size */
+  margin-right: 10px; /* Add some spacing between images */
+  height: 500px;
+  width: 350px;
+  border: red solid 5px;
+  scroll-snap-align: start; /* Align to the start of each image */
+}
+.movie:hover {
+  cursor: pointer;
+  opacity: 80%;
+}
+p {
+  color: black;
+  margin: 50% 0;
+  text-align: center;
+}
+h4 {
+  text-align: center;
+  color: white;
+  margin: 10px;
+}
+
+#myModal {
+  color: black;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  color: black;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.close {
+  cursor: pointer;
+  position: relative;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  font-size: large;
+}
+
+/* popup stuff */
+#nav {
+  height: 80px;
+  border: 1px solid black;
+}
+
+#icon {
+  float: right;
+  height: 70px;
+  width: 70px;
+  padding: 2px;
+  transition: 0.2s ease-in-out;
+}
+
+#icon:hover {
+  transform: scale(1.05, 1.05);
+}
+
+#sidebar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 15px;
+  border-radius: 5px;
+  float: right;
+  background-image: url("images/theater.jpg");
+  background-color: rgba(0, 0, 0, 0.5);
+  background-blend-mode: multiply;
+  width: 250px;
+  transition: all 0.2s;
+}
+
+#x-out {
+  float: right;
+  width: 20px;
+  height: 20px;
+  color: #fff;
+  font-size: 30px;
+  font-weight: 400;
+  transition: 0.14s ease;
+  padding-bottom: 5px;
+}
+
+#x-out:hover {
+  transform: scale(1.1, 1.1);
+  color: red;
+  cursor: pointer;
+}
+
+#subheader {
+  font-size: 30px;
+  font-weight: 100;
+  font-kerning: normal;
+  color: #fff;
+}
+
+#empty {
+  font-size: 20px;
+  color: #fff;
+  font-style: italic;
+}
+
+/*watchlist stuff*/
+ul {
+  list-style: none;
+  padding-left: 5px;
+}
+
+.title,
+.year,
+.genre,
+.blurb {
+  color: #fff;
+  transition: all 0.2s;
+}
+.title {
+  font-size: 25px;
+  font-weight: 500;
+}
+.year,
+.genre {
+  font-style: italic;
+  font-size: 15px;
+}
+
+.thumbnail {
+  padding-top: 5px;
+  height: 160px;
+  width: 120px;
+  transition: all 0.2s;
+}
+
+.blurb {
+  width: 220px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  text-align: center;
+  font-size: 0px;
+  border-bottom: 4px dotted white;
+}
+
+.blurb:hover {
+  font-size: 15px;
+  background-color: transparent;
+}
+
+.movie-cols {
+  display: flex;
+}
+
+.info {
+  padding-top: 10px;
+}
