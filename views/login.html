@@ -1,31 +1,86 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
+    <title>Login</title>
+    <style>
+      body {
+        background-color: rgb(0, 0, 0);
+      }
+      h1 {
+        text-align: center;
+        color: whitesmoke;
+      }
+      form {
+        width: 25%;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.536);
+      }
 
-</head>
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+      }
 
-<body>
+      /* input[type="submit"] {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+       */
+      button {
+        background-color: #4caf50;
+        border-radius: 10px;
+        justify-content: center;
+
+        margin: auto auto;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+
+  <body>
     <h1>Login</h1>
     <!-- Using ejs library in backend to render error message -->
     <% if (messages.error) { %>
         <%= messages.error %>
       <% } %>
-    <form action="/login" method="post">
-        <div>
-            <label for="email">Email</label>
-            <input type="text" id="email" name="email" required>
-        </div>
-        <div>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <button type="submit">Login</button>
+    <form
+      action="/login"
+      method="post">
+      <div>
+        <label for="email">Email</label>
+        <input
+          type="text"
+          id="email"
+          name="email"
+          required />
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required />
+      </div>
+      <button type="submit">Login</button>
     </form>
     <a href="/signup">Signup</a>
-</body>
-
-
-
-
-
+  </body>
 </html>
