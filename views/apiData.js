@@ -10,7 +10,7 @@ var allInfo = "";
 async function getInfo(file) {
     let x = await fetch(file);
     let y = await x.text();
-    allInfo = y;
+    allInfo = JSON.parse(y);
 }
 
 var title;
@@ -21,8 +21,8 @@ var description;
 async function run(){
     await getInfo(requestLink);
     //console.log(allInfo);
-    title = allInfo["Title"];
-    console.log(title);
+    var title2 = allInfo.Title;
+    console.log(title2);
     
 }
 
