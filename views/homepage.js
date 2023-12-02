@@ -1,3 +1,5 @@
+const { get } = require("mongoose");
+
 var toggleStatus = "closed";
 
 function setUp() {
@@ -22,32 +24,6 @@ function closeSidebar() {
   }
 }
 
-let kieranKey = "8ea8d568";
-let t = "totoro";
-let requestLink = "http://www.omdbapi.com/?apikey=" + kieranKey + "&t=" + t;
-/* ^ fetch input stuff ^ */
-
-let allInfo = "";
-
-async function getInfo(file) {
-  let x = await fetch(file);
-  let y = await x.text();
-  allInfo = JSON.parse(y);
-}
-
-let title;
-let poster;
-let year;
-let description;
-
-async function run() {
-  await getInfo(requestLink);
-  title = allInfo["Title"];
-  console.log(title);
-}
-
-run();
-
 var tmdb_api_key = "e2978d1da72adcf778b7bc358679b035";
 
 const options = { method: "GET", headers: { accept: "application/json" } };
@@ -57,21 +33,39 @@ const genres_url =
   tmdb_api_key +
   "&language=en-US";
 
-const jsonstuff = fetch(genres_url, options)
-  .then((res) => res.json())
-  .then((json) => () => {
-    return json;
-  })
-  .catch((err) => console.error("error:" + err));
+async function getGenres() {
+  try {
+    let response = await fetch(genres_url, options);
+    let data = await response.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error("error:" + err);
+  }
+}
 
-console.log(jsonstuff);
+async function getImages(json) {
+  json.results.forEach((element) => {
+    console.log(element.backdrop_path);
+  });
+}
 
-const url =
-  "&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=28";
-var rl =
-  "https://api.themoviedb.org/3/discover/movie?api_key=" + tmdb_api_key + url;
+async function run() {
+  // await getting all genres
+  const genres = await getGenres();
+  // genres[3] is comedy, this is where we do specialized queries
+  const filters = "&with_genres=" + genres.genres[3].id;
+  const movies_url =
+    "https://api.themoviedb.org/3/discover/movie?api_key=" +
+    tmdb_api_key +
+    filters;
+  // gets results from
+  fetch(movies_url, options)
+    .then((res) => res.json())
+    .then((json) => getImages(json))
+    .catch((err) => console.error("error:" + err));
 
-// fetch(rl, options)
-//   .then((res) => res.json())
-//   .then((json) => console.log(json))
-//   .catch((err) => console.error("error:" + err));
+  return genres;
+}
+
+run();
