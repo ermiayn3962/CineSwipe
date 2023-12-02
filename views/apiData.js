@@ -1,7 +1,7 @@
 
-var kieranKey = "8ea8d568";
+var kieranKey = "e2978d1da72adcf778b7bc358679b035";
 var t = "totoro";
-var requestLink = "http://www.omdbapi.com/?apikey=" 
+var requestLink = "http://www.tmdbapi.com/?apikey=" 
 + kieranKey + "&t=" + t;
 /* ^ fetch input stuff ^ */
 
@@ -21,8 +21,8 @@ var description;
 async function run(){
     await getInfo(requestLink);
     //console.log(allInfo);
-    var title2 = allInfo.Title;
-    console.log(title2);
+    title = allInfo.Title;
+    console.log(title);
     
 }
 
