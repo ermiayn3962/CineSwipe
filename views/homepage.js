@@ -45,6 +45,7 @@ async function getGenres() {
 }
 
 async function getImages(json) {
+  console.log(json);
   json.results.forEach((element) => {
     console.log(element.backdrop_path);
   });
