@@ -1,5 +1,3 @@
-const { get } = require("mongoose");
-
 var toggleStatus = "closed";
 
 function setUp() {
@@ -32,6 +30,7 @@ const genres_url =
   "https://api.themoviedb.org/3/genre/movie/list?api_key=" +
   tmdb_api_key +
   "&language=en-US";
+const images_url = "https://image.tmdb.org/t/p/w500/";
 
 async function getGenres() {
   try {
@@ -47,7 +46,9 @@ async function getGenres() {
 async function getImages(json) {
   console.log(json);
   json.results.forEach((element) => {
-    console.log(element.backdrop_path);
+    console.log("Title:", element.title);
+    console.log("Poster Path:", images_url + element.poster_path);
+    console.log("Backdrop Path", images_url + element.backdrop_path + "\n");
   });
 }
 
@@ -55,7 +56,7 @@ async function run() {
   // await getting all genres
   const genres = await getGenres();
   // genres[3] is comedy, this is where we do specialized queries
-  const filters = "&with_genres=" + genres.genres[3].id;
+  const filters = "&with_genres=" + genres.genres[4].id;
   const movies_url =
     "https://api.themoviedb.org/3/discover/movie?api_key=" +
     tmdb_api_key +
