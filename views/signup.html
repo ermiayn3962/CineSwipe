@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head>
+    <head>
+        <link rel="stylesheet" href="tempstyle.css">
+        <title>Create Account</title>
+    </head>
 
-</head>
-
-<body>
-    <h1>Signup</h1>
-
-    <form action="/signup" method="post">
-        <div>
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required>
+    <body>
+        <div class="wrapper">
+            <form action="/signup" method="post">
+                <h1>New Account</h1>
+                <div class="input-box">
+                    <label for="name">Username</label>
+                    <input class="input" type="text" id="name" name="name" placeholder="user123" required>
+                </div>
+                <div class="input-box">
+                    <label for="email">Email</label>
+                    <input class="input" type="text" id="email" name="email" placeholder="name@example.com" required>
+                </div>
+                <div class="input-box">
+                    <label for="password">Password</label>
+                    <input class="input" type="password" id="password" name="password" placeholder="********" required>
+                </div>
+                <button class="btn" type="submit">Create Account!</button>
+            </form>
+            <a href="/login" class="alr"><br>I have an account already</a>
         </div>
-        <div>
-            <label for="email">Email</label>
-            <input type="text" id="email" name="email" required>
-        </div>
-        <div>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <button type="submit">Register</button>
-    </form>
-    <a href="/login">Login</a>
-</body>
+    </body>
+</html>
 
 
 
