@@ -6,8 +6,26 @@
 
 <body>
     <!-- Using ejs library in backend to render message -->
-    <h1>Hi <%= name %></h1>
-
+    <p>Your Current Recommendations: </p>
+    
+    <script> 
+        try {
+        const response = fetch("https://localhost:3000/api/login", {
+            method: "POST",
+            body: JSON.stringify({
+                email: "a@a",
+                password: "a"
+            }), 
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+        .then((response) => response.json())
+        .then((json) => console.log(json));
+    } catch (error) {
+        console.log("Error:" + error);
+    }
+    </script>
 </body>
 
 
