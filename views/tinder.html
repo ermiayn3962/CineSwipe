@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> animation test </title>
+        <style>
+            #card {
+                width: 100vw;
+                margin-top: 10%;
+                padding-bottom: 15px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+            }
+            #poster {
+                max-height: 400px;
+                max-width: 300px;
+            }
+            #container{
+                position: relative;
+                margin: 0 auto;
+            }
+            #yn {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            #like, #dislike {
+                padding: 5px;
+            }
+            #poster{
+                transition: 0.3s ;
+                border: 0px solid #AFE1AF;
+                border-radius: 10px;
+            }
+            #movieTitle{
+                font-weight: 400;
+                font-size: 20px;
+                text-align: center;
+                transition: 0.1s ;
+            }
+        </style>
+        <!--<script src="./tinder.js">
+            
+        </script>-->
+    </head>
+    <body>
+        <div id="card">
+            
+            <img id="poster" src="">
+            <label id="movieTitle" for="poster"></label>
+        </div>
+        <div id="container">
+            <div id="yn">
+                <button id="like" onclick="yes()">Yes</button>
+                <button id="dislike" onclick="no()">No</button>
+            </div>
+        </div>
+        <div id="main"></div>
+
+
+        <script>
+            async function no(){
+                var mov = document.getElementById('movieTitle').style
+                mov.transform = "scale(0,0)";
+                var image = document.getElementById('poster').style;
+                image.border = "10px solid #a40000";
+                image.transform = "translateX(300%) scale(0,0) rotate(30deg)";
+                await get_info();
+                image.border = "none";
+                setTimeout(image.transform = "revert", 100);
+                setTimeout(mov.transform = "revert", 100);
+            }
+            async function yes(){
+                var mov = document.getElementById('movieTitle').style
+                mov.transform = "scale(0,0)";
+                var image = document.getElementById('poster').style;
+                image.border = "10px solid #7CFC00";
+                image.transform = "translateX(-400%) scale(0.0,0.0) rotate(-30deg)";
+                await get_info();
+                image.border = "none";
+                setTimeout(image.transform = "revert", 100);
+                setTimeout(mov.transform = "revert", 33000);
+                
+                  
+            }
+
+            const tmdb_api_key = "e2978d1da72adcf778b7bc358679b035";
+            const link = 'https://api.themoviedb.org/3/discover/movie/?api_key=';
+            const options = { method: "GET", headers: { accept: "application/json" } };
+            const genres = [null, 28, 12, 16, 35, 80, 99, 18, 10751, 14, 36, 27, 10402, 9648, 10749, 878, 10770, 53, 10752, 37];
+            //const pgs = [null, 1902, 1039, 2458, 6200, 1537, 7092, 10149, 1207, 973, 757, 2233, 1830, 874, 2352, 919, 1131, 2080, 486, 419];
+            const max_pgs = [null, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 486, 419];
+            // Action          28 1903
+            // Adventure       12 1040
+            // Animation       16 2459
+            // Comedy          35 6201
+            // Crime           80 1538
+            // Documentary     99 7093
+            // Drama           18 10150
+            // Family          10751 1208
+            // Fantasy         14 974
+            // History         36 758
+            // Horror          27 2234
+            // Music           10402 1831
+            // Mystery         9648 875
+            // Romance         10749 2353
+            // Science Fiction 878 920
+            // TV Movie        10770 1132
+            // Thriller        53 2081
+            // War             10752 487
+            // Western         37 420
+
+
+            async function randomMovie() {
+                var rand = randomInt(1, genres.length - 1);
+                var category = genres[rand];
+                var maxPage = max_pgs[rand];
+                var page = randomInt(1, maxPage);
+                var callAPI = link + tmdb_api_key + '&with_genres=' + category + '&page=' + page + '&include_adult=false';
+                //console.log("category: " + category + ", page: " + page + ", rand: " +rand);
+                try {
+                    let response = await fetch(callAPI, options);
+                    let data = await response.json();
+                    rand2 = randomInt(1, data.results.length-1);
+                    return data.results[rand2];
+                } catch (err) {
+                    console.error("error:" + err);
+                }
+            }
+
+            function randomInt(min, max) { // min and max included 
+                return Math.floor(Math.random() * (max - min + 1) + min);
+            }
+
+            var movieDatum;
+
+            var title_poster_desc = [];
+
+            async function get_info() {
+                movieDatum = await randomMovie();
+                
+                title_poster_desc = [movieDatum["title"], movieDatum["poster_path"], movieDatum["overview"]];
+
+                //console.log(title_poster_desc);
+                var imgLink = 'https://image.tmdb.org/t/p/original' + movieDatum["poster_path"];
+                document.getElementById('poster').src=imgLink;
+                document.getElementById('movieTitle').innerHTML = movieDatum["title"];
+            }
+
+            document.addEventListener("load", get_info());
+        </script>
+    </body>
+</html>
