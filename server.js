@@ -123,6 +123,7 @@ app.post('/api/signup', async (req, res) => {
                     res.json({
                         message: 'User created successfully'}
                     );
+                    
 
                 }
             });
