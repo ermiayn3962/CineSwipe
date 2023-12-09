@@ -76,6 +76,18 @@
                 justify-content: center;
                 align-items: center;
             }
+            #heart, #X {
+                transition: 0.2s ease-in-out;
+                background:none;
+                height: 30px;
+                width: 30px;
+            }
+            #heart:hover {
+                transform: scale(1.05,1.05);
+            }
+            #X:hover {
+                transform: scale(1.05,1.05);
+            }
             #like, #dislike {
                 padding: 5px;
             }
@@ -95,6 +107,7 @@
                 display: inline-block;
                 justify-content: center;
             }
+
             
         </style>
         <!--<script src="./tinder.js">
@@ -116,8 +129,8 @@
                 </div>
             <!--</div>-->
             <div id="yn">
-                <button id="like" onclick="yes()">I would watch this!</button>
-                <button id="dislike" onclick="no()">I would not watch this!</button>
+                <button id="like" onclick="yes()"><img id="heart" src="icons/blankheart.png"></button>
+                <button id="dislike" onclick="no()"><img id="X" src="icons/blackX.png"></button>
                 <button id="seenIt" onclick="seen()">I've seen this!</button>
                 <button id="amWatching" onclick="watching()">I'm watching this!</button>
             </div>
@@ -165,7 +178,9 @@
 
 
             async function no(){
-                //document.getElementById('desc').style.display = "none";
+                document.getElementById('X').src = "icons/redX.png";
+                setTimeout(document.getElementById('X').src = "icons/blackX.png", 200);
+
                 var mov = document.getElementById('movieTitle').style
                 mov.transform = "scale(0,0)";
                 var image = document.getElementById('poster').style;
@@ -178,7 +193,9 @@
             }
 
             async function yes(){
-                //document.getElementById('desc').style.display = "none";
+                document.getElementById('heart').src = "icons/redheart.png";
+                setTimeout(document.getElementById('heart').src = "icons/blankheart.png", 200);
+
                 var mov = document.getElementById('movieTitle').style
                 mov.transform = "scale(0,0)";
                 var image = document.getElementById('poster').style;
