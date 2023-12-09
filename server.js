@@ -1,22 +1,22 @@
 /* importing the installed dependencies */
-require('dotenv').config({path: __dirname + '/.env'});
-const express = require('express');
-const bodyParser = require('body-parser');
+require("dotenv").config({ path: __dirname + "/.env" });
+const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
-const bcrypt = require('bcrypt');
-const mongoose = require('mongoose');
-const passport = require('passport');
-const flash = require('express-flash');
-const session = require('express-session');
+const bcrypt = require("bcrypt");
+const mongoose = require("mongoose");
+const passport = require("passport");
+const flash = require("express-flash");
+const session = require("express-session");
 
 /* Connecting to database */
 async function connect() {
-    try {
-        await mongoose.connect(process.env.URI, {dbName: 'filmQ'});
-        console.log("Connected to MongoDB");
-    } catch (error) {
-        chonsole.log(error);
-    }
+  try {
+    await mongoose.connect(process.env.URI, { dbName: "filmQ" });
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 connect();
@@ -24,119 +24,120 @@ var db = mongoose.connection;
 
 /* User Schema */
 const userSchema = new mongoose.Schema({
-    id : String,
-    name : String,
-    email : String,
-    password : String,
-    recs : [String],
-    watchlist : [String]
-})
+  id: String,
+  name: String,
+  email: String,
+  password: String,
+  recs: [String],
+  watchlist: [String],
+});
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 /* Initialize passport */
-const initializePassport = require('./passport-config.js');
+const initializePassport = require("./passport-config.js");
 initializePassport(
-    passport, 
-    async email => await User.findOne({email: email}),
-    async id => await User.findOne({id: id})
+  passport,
+  async (email) => await User.findOne({ email: email }),
+  async (id) => await User.findOne({ id: id })
 );
 
 /* Setting app uses */
-app.set('views', 'views');
-app.engine('html', require('ejs').renderFile);
+app.set("views", "views");
+app.engine("html", require("ejs").renderFile);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 app.use(flash());
-app.use(session({
+app.use(
+  session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false
-}));
+    saveUninitialized: false,
+  })
+);
 app.use((req, res, next) => {
-    res.locals.message = req.flash();
-    next();
-})
+  res.locals.message = req.flash();
+  next();
+});
 app.use(passport.initialize());
 app.use(passport.session());
-    
+
 /* Pages */
-app.get('/user', async(req, res) => {
-    var user = await req.user;
-    console.log('inside user');
-    console.log(user);
-    res.json(user)
-})
+app.get("/user", async (req, res) => {
+  var user = await req.user;
+  console.log("inside user");
+  console.log(user);
+  res.json(user);
+});
 
-app.get('/index', (req, res) => {
-    res.sendFile(__dirname + "/views/index.html")
-})
+app.get("/index", (req, res) => {
+  res.sendFile(__dirname + "/views/index.html");
+});
 
-app.post('/api/login', passport.authenticate('local', {
-    successRedirect: '/user',
-    failureRedirect: '/errorMessage',
-    failureFlash: true
-}))
+app.post(
+  "/api/login",
+  passport.authenticate("local", {
+    successRedirect: "/user",
+    failureRedirect: "/errorMessage",
+    failureFlash: true,
+  })
+);
 
-app.get('/errorMessage', (req, res) => {
-    console.log("in errors")
-    res.send(res.locals.message)
-})
-
+app.get("/errorMessage", (req, res) => {
+  console.log("in errors");
+  res.send(res.locals.message);
+});
 
 // Adding user information to database
-app.post('/api/signup', async (req, res) => {
-    console.log("inside signup")
-    console.log(req.body.name)
-    console.log(req.body.email)
-    console.log(req.body.password)
+app.post("/api/signup", async (req, res) => {
+  console.log("inside signup");
+  console.log(req.body.name);
+  console.log(req.body.email);
+  console.log(req.body.password);
 
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-    try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const data = new User({
+      id: Date.now().toString(),
+      name: req.body.name,
+      email: req.body.email,
+      password: hashedPassword,
+      recs: [],
+      watchlist: [],
+    });
 
-        const data = new User({
-            id: Date.now().toString(),
-            name: req.body.name,
-            email: req.body.email,
-            password: hashedPassword,
-            recs: [],
-            watchlist: []
-        })
+    console.log(data);
 
-        console.log(data)
-
-        /* Checking if user already exists */
-        user = await User.findOne({email : data.email});
-        console.log(user)
-        if (user == null) {
-            console.log('before ')
-            db.collection('users').insertOne(data, (error, collection) => {
-                if (error) {
-                    res.json({
-                        message: error
-                    });
-                } else {
-                    console.log("User inserted to DB successfully");
-                    res.json({
-                        message: 'User created successfully'}
-                    );
-                    
-
-                }
-            });
+    /* Checking if user already exists */
+    user = await User.findOne({ email: data.email });
+    console.log(user);
+    if (user == null) {
+      console.log("before ");
+      db.collection("users").insertOne(data, (error, collection) => {
+        if (error) {
+          res.json({
+            message: error,
+          });
         } else {
-            res.json({
-                message: 'User already exists'}
-             );
+          console.log("User inserted to DB successfully");
+          res.json({
+            message: "User created successfully",
+          });
         }
-    } catch {
-        res.json({
-            message: 'User already exists'}
-         );
+      });
+    } else {
+      res.json({
+        message: "User already exists",
+      });
     }
-})
+  } catch {
+    res.json({
+      message: "User already exists",
+    });
+  }
+});
 
-app.listen(3000, () => console.log("Server starting on port 3000"))
+app.listen(3000, () => console.log("Server starting on port 3000"));
