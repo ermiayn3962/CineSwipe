@@ -9,8 +9,7 @@ function setUp() {
 function openSidebar() {
   $("#sidebar").show();
   if (toggleStatus == "closed") {
-    // toggleStatus = "open";
-    // unzeroize();
+    toggleStatus = "open";
   }
 }
 
@@ -18,7 +17,6 @@ function closeSidebar() {
   $("#sidebar").hide();
   if (toggleStatus == "open") {
     toggleStatus = "closed";
-    // zeroize();
   }
 }
 
@@ -56,7 +54,7 @@ async function run() {
   // await getting all genres
   const genres = await getGenres();
   // genres[3] is comedy, this is where we do specialized queries
-  const filters = "&with_genres=" + genres.genres[4].id;
+  const filters = "&with_genres=" + genres.genres[3].id;
   const movies_url =
     "https://api.themoviedb.org/3/discover/movie?api_key=" +
     tmdb_api_key +
