@@ -9,13 +9,9 @@
     </head>
 
     <body>
-    <!-- Using ejs library in backend to render error message 
-    <% if (messages.error) { %>
-    <%= messages.error %>
-    <% } %>
-    -->
+
         <div class="wrapper">
-            <form action="/login" method="post">
+            <form action="http://localhost:3000/api/login" method="post">
                 <h1>Login</h1>
                 <div class="input-box">
                     <label for="email">Email</label>
@@ -27,7 +23,7 @@
                 </div>
                 <button class="btn" type="submit">Login</button>
             </form>
-            <a href="/signup" class="alr"><br>I don't have an account yet</a>
+            <a href="./signup.html" class="alr"><br>I don't have an account yet</a>
         </div>
     </body>
 
