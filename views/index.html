@@ -6,7 +6,7 @@
       src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"></script>
-    <script src="homepage.js"></script>
+    <!-- <script src="homepage.js"></script> -->
     <style
       rel
       href="styles.css"></style>
@@ -94,7 +94,6 @@
         margin-right: 10px; /* Add some spacing between images */
         height: 500px;
         width: 350px;
-        border: red solid 5px;
         scroll-snap-align: start; /* Align to the start of each image */
       }
       .movie:hover {
@@ -293,42 +292,15 @@
     <section>
       <h1>Top Movies</h1>
       <div class="movies-wrapper">
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
+        <div class="movie popular"></div>
+        <div class="movie popular"></div>
+        <div class="movie popular"></div>
+        <div class="movie popular"></div>
+        <div class="movie popular"></div>
+        <div class="movie popular"></div>
+        <div class="movie popular"></div>
+        <div class="movie popular"></div>
+        <div class="movie popular"></div>
       </div>
     </section>
 
@@ -337,53 +309,129 @@
         $(".movie").on("click", openModal);
         $("#closeModal").on("click", closeModal);
       });
-      function openModal() {
+
+      async function openModal() {
+        let movieId = $(this).data("id");
+        const providers = await getProviders(movieId);
+        const usProviders = providers.results.US;
+        try {
+          const streamingProviders = usProviders.flatrate.map((provider) => {
+            return provider.provider_name;
+          });
+          $("#streaming").text(streamingProviders.join(", "));
+        } catch (err) {
+          $("#streaming").text("No streaming providers available");
+
+          console.log(err);
+        }
         $("#myModal").css({ display: "flex" });
       }
       function closeModal() {
         $("#myModal").hide();
       }
+      var toggleStatus = "closed";
+
+      function setUp() {
+        //   setTimeout(function () {
+        //     zeroize();
+        //   }, 1500);
+      }
+
+      function openSidebar() {
+        $("#sidebar").show();
+        if (toggleStatus == "closed") {
+          toggleStatus = "open";
+        }
+      }
+
+      function closeSidebar() {
+        $("#sidebar").hide();
+        if (toggleStatus == "open") {
+          toggleStatus = "closed";
+        }
+      }
+
+      var tmdb_api_key = "e2978d1da72adcf778b7bc358679b035";
+
+      const options = {
+        method: "GET",
+        headers: { accept: "application/json" },
+      };
+
+      const popular_url =
+        "https://api.themoviedb.org/3/discover/movie?api_key=" +
+        tmdb_api_key +
+        "&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc";
+
+      const images_url = "https://image.tmdb.org/t/p/original/";
+
+      async function getPopular() {
+        try {
+          let response = await fetch(popular_url, options);
+          let data = await response.json();
+          return data;
+        } catch (err) {
+          console.error("error:" + err);
+        }
+      }
+      async function getProviders(movie_id) {
+        const providers_url =
+          "https://api.themoviedb.org/3/movie/" +
+          movie_id +
+          "/watch/providers?api_key=" +
+          tmdb_api_key;
+
+        try {
+          let response = await fetch(providers_url, options);
+          let data = await response.json();
+          console.log(data);
+          return data;
+        } catch (err) {
+          console.error("error:" + err);
+        }
+      }
+      async function setBigImage() {
+        let data = await getPopular();
+        $(".random-big").css({
+          "background-image":
+            "url(" + images_url + data.results[0].backdrop_path + ")",
+          "background-size": "cover",
+          "background-position": "center center",
+          "background-repeat": "no-repeat",
+        });
+      }
+      async function setPopularMovies() {
+        let data = await getPopular();
+        $(".movie.popular").each(function (index) {
+          if (index < data.results.length) {
+            $(this).css({
+              "background-image":
+                "url(" + images_url + data.results[index].poster_path + ")",
+              "background-size": "cover",
+              "background-position": "center center",
+              "background-repeat": "no-repeat",
+            });
+            $(this).attr("data-id", data.results[index].id);
+          }
+        });
+      }
+      setBigImage();
+      setPopularMovies();
+      // setTinderMovies();
     </script>
 
     <section>
       <h1>Your Picks</h1>
       <div class="movies-wrapper">
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
+        <div class="movie"></div>
+        <div class="movie"></div>
+        <div class="movie"></div>
+        <div class="movie"></div>
+        <div class="movie"></div>
+        <div class="movie"></div>
+        <div class="movie"></div>
+        <div class="movie"></div>
+        <div class="movie"></div>
       </div>
     </section>
 
@@ -395,7 +443,7 @@
           >&times;
         </span>
         <h2>Modal Content</h2>
-        <p>This is a simple modal example.</p>
+        <p id="streaming">This is a simple modal example.</p>
       </div>
     </div>
 
