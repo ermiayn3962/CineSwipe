@@ -97,6 +97,7 @@
                 border-radius: 10px;
             }
             
+            
             #allInfo{
                 display: none;
             }
@@ -138,12 +139,12 @@
 
 
         <script>
-            document.getElementById('movieTitle').addEventListener("mouseover", function() {    
+            document.getElementById('poster').addEventListener("mouseover", function() {    
                 document.getElementById('desc').style.display = "contents";
                 document.getElementById('desc').style.transform = "scale(1,1)";
             });
 
-            document.getElementById('movieTitle').addEventListener("mouseout", function(){
+            document.getElementById('poster').addEventListener("mouseout", function(){
                 document.getElementById('desc').style.display = "none";
                 document.getElementById('desc').style.transform = "scale(1,1)";
             });
