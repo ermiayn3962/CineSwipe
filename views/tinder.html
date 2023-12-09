@@ -2,7 +2,12 @@
 <html>
     <head>
         <title> animation test </title>
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <style>
+            *{
+                z-index: 1;
+                
+            }
             #card {
                 width: 100vw;
                 margin-top: 10%;
@@ -11,15 +16,60 @@
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                position: absolute;
+                position: fixed;
+                z-index: -1;
+                
             }
+            /* #overlay {
+                
+                
+                align-items: center;
+                justify-content: center;
+                
+                z-index: -1;
+                background: rgba(205, 92 ,92, 0.8);
+                background-blend-mode: lighten;
+                max-width: 420px;
+            } */
             #poster {
                 max-height: 400px;
                 max-width: 300px;
+                position: relative;
+                z-index: -1;
+            }
+            #movieTitle, #desc {
+                position: relative;
+                z-index: -1;
+                color: #fff;
+                max-width: 400px;
+                
+                text-align: center;
+                transition: 0.1s ;
+            }
+            #movieTitle{
+                font-size: 25px;
+                font-weight: 600;
+                
+            }
+            #titleWrapper{
+                max-width: 420px;
+                
+            }
+
+            #desc{
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+                font-size: 18px;
+                display: none;
+                transition: 0.1s ease-in-out;
             }
             #container{
                 position: relative;
                 margin: 0 auto;
+                width: 100vw;
+                height: 100vh;
+                background: #f08080;
             }
             #yn {
                 display: flex;
@@ -34,50 +84,106 @@
                 border: 0px solid #AFE1AF;
                 border-radius: 10px;
             }
-            #movieTitle{
-                font-weight: 400;
-                font-size: 20px;
-                text-align: center;
-                transition: 0.1s ;
+            
+            #allInfo{
+                display: none;
             }
+            #desc_wrapper {
+                max-width: 400px;
+                position: relative;
+                z-index: -1;
+                display: inline-block;
+                justify-content: center;
+            }
+            
         </style>
         <!--<script src="./tinder.js">
             
         </script>-->
     </head>
     <body>
-        <div id="card">
-            
-            <img id="poster" src="">
-            <label id="movieTitle" for="poster"></label>
-        </div>
+
+        
         <div id="container">
+            <!--<div id="overlay">-->
+                <div id="card">
+                    <img id="poster" src="">
+                    <label id="movieTitle" for="poster"></label>
+                    <div id="desc_wrapper">
+                        <p id="desc"></p>
+                    </div>
+                    <p id="allInfo"></p>
+                </div>
+            <!--</div>-->
             <div id="yn">
-                <button id="like" onclick="yes()">Yes</button>
-                <button id="dislike" onclick="no()">No</button>
+                <button id="like" onclick="yes()">I would watch this!</button>
+                <button id="dislike" onclick="no()">I would not watch this!</button>
+                <button id="seenIt" onclick="seen()">I've seen this!</button>
+                <button id="amWatching" onclick="watching()">I'm watching this!</button>
             </div>
         </div>
-        <div id="main"></div>
 
 
         <script>
-            async function no(){
+            document.getElementById('movieTitle').addEventListener("mouseover", function() {    
+                document.getElementById('desc').style.display = "contents";
+                document.getElementById('desc').style.transform = "scale(1,1)";
+            });
+
+            document.getElementById('movieTitle').addEventListener("mouseout", function(){
+                document.getElementById('desc').style.display = "none";
+                document.getElementById('desc').style.transform = "scale(1,1)";
+            });
+            
+
+            async function seen(){
+                //document.getElementById('desc').style.display = "none";
                 var mov = document.getElementById('movieTitle').style
                 mov.transform = "scale(0,0)";
                 var image = document.getElementById('poster').style;
                 image.border = "10px solid #a40000";
-                image.transform = "translateX(300%) scale(0,0) rotate(30deg)";
+                
+                image.transform = "translateX(200%) translateY(150%) scale(0,0)";
                 await get_info();
                 image.border = "none";
                 setTimeout(image.transform = "revert", 100);
                 setTimeout(mov.transform = "revert", 100);
             }
+
+            async function watching(){
+                //document.getElementById('desc').style.display = "none";
+                var mov = document.getElementById('movieTitle').style
+                mov.transform = "scale(0,0)";
+                var image = document.getElementById('poster').style;
+                image.border = "10px solid #a40000";
+                image.transform = "translateY(250%) scale(0,0)";
+                await get_info();
+                image.border = "none";
+                setTimeout(image.transform = "revert", 100);
+                setTimeout(mov.transform = "revert", 100);
+            }
+
+
+            async function no(){
+                //document.getElementById('desc').style.display = "none";
+                var mov = document.getElementById('movieTitle').style
+                mov.transform = "scale(0,0)";
+                var image = document.getElementById('poster').style;
+                image.border = "10px solid #a40000";
+                image.transform = "translateX(-300%) scale(0.0,0.0) rotate(-30deg)";
+                await get_info();
+                image.border = "none";
+                setTimeout(image.transform = "revert", 100);
+                setTimeout(mov.transform = "revert", 100);
+            }
+
             async function yes(){
+                //document.getElementById('desc').style.display = "none";
                 var mov = document.getElementById('movieTitle').style
                 mov.transform = "scale(0,0)";
                 var image = document.getElementById('poster').style;
                 image.border = "10px solid #7CFC00";
-                image.transform = "translateX(-400%) scale(0.0,0.0) rotate(-30deg)";
+                image.transform = "translateX(300%) scale(0,0) rotate(30deg)";
                 await get_info();
                 image.border = "none";
                 setTimeout(image.transform = "revert", 100);
@@ -141,12 +247,21 @@
             async function get_info() {
                 movieDatum = await randomMovie();
                 
-                title_poster_desc = [movieDatum["title"], movieDatum["poster_path"], movieDatum["overview"]];
+                //title_poster_desc = [movieDatum["title"], movieDatum["poster_path"], movieDatum["overview"]];
 
                 //console.log(title_poster_desc);
                 var imgLink = 'https://image.tmdb.org/t/p/original' + movieDatum["poster_path"];
                 document.getElementById('poster').src=imgLink;
                 document.getElementById('movieTitle').innerHTML = movieDatum["title"];
+                var movieInfoString = JSON.stringify(movieDatum);
+                document.getElementById('allInfo').innerHTML = movieDatum;
+                var description = movieDatum["overview"];
+                var firstSentence = description.split(". ");
+                var blurb = firstSentence[0] + ". "
+                if(firstSentence.length > 1){
+                    blurb += firstSentence[1] + "...";
+                } 
+                document.getElementById('desc').innerHTML = blurb
             }
 
             document.addEventListener("load", get_info());
