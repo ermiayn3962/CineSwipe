@@ -113,13 +113,12 @@
             height: 10vh;
             justify-content: center;
             text-align: center;
-            background: transparent;
-            /* background-color: #FFB6C1; */
+            background: #f08080;
+            background-color: #f08080;
         }
         #logo_logo {
             margin-top: 5px;
             margin-bottom: 5px;
-            max-height: 77px;
         }
 
         #container {
@@ -229,6 +228,7 @@
 
     <script>
         /*left column*/
+        /*left column*/
         document.getElementById('poster').addEventListener("mouseover", function () {
             document.getElementById('desc').style.display = "contents";
             document.getElementById('desc').style.transform = "scale(1,1)";
@@ -238,24 +238,6 @@
             document.getElementById('desc').style.display = "none";
             document.getElementById('desc').style.transform = "scale(1,1)";
         });
-
-        document.getElementById('amWatching').addEventListener("mouseover", function () {
-                document.getElementById('listTxt').style.display = "contents";
-                document.getElementById('listTxt').style.transform = "scale(1,1)";
-            });
-        document.getElementById('amWatching').addEventListener("mouseout", function () {
-                document.getElementById('listTxt').style.display = "none";
-                document.getElementById('listTxt').style.transform = "scale(1,1)";
-            });
-
-        document.getElementById('seenIt').addEventListener("mouseover", function () {
-                document.getElementById('seentTxt').style.display = "contents";
-                document.getElementById('seentTxt').style.transform = "scale(1,1)";
-            });
-            document.getElementById('seenIt').addEventListener("mouseout", function () {
-                document.getElementById('seentTxt').style.display = "none";
-                document.getElementById('seentTxt').style.transform = "scale(1,1)";
-            });
 
 
         async function seen() {
