@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('express-flash');
 const session = require('express-session');
+const path = require('path');
 
 /* Connecting to database */
 async function connect() {
@@ -61,26 +62,32 @@ app.use((req, res, next) => {
 })
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(express.static(path.join(__dirname, "views")))
     
-/* Pages */
-app.get('/user', async(req, res) => {
+/* API Calls */
+app.get('/api/user', async(req, res) => {
     var user = await req.user;
     console.log('inside user');
     console.log(user);
-    res.json(user)
+    // res.json(user)
+    res.redirect('/index?data=' + `${JSON.stringify(user)}`)
+
 })
 
 app.get('/index', (req, res) => {
+    let data = JSON.parse(req.query.data)
+    console.log("data is", data);
     res.sendFile(__dirname + "/views/index.html")
 })
 
 app.post('/api/login', passport.authenticate('local', {
-    successRedirect: '/user',
-    failureRedirect: '/errorMessage',
+    successRedirect: '/api/user',
+    failureRedirect: '/api/errorMessage',
     failureFlash: true
 }))
 
-app.get('/errorMessage', (req, res) => {
+app.get('/api/errorMessage', (req, res) => {
     console.log("in errors")
     res.send(res.locals.message)
 })
@@ -98,7 +105,7 @@ app.post('/api/signup', async (req, res) => {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
         const data = new User({
-            id: Date.now().toString(),
+            id: parseFloat(Date.now().toString()),
             name: req.body.name,
             email: req.body.email,
             password: hashedPassword,
