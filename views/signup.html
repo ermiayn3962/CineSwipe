@@ -1,29 +1,45 @@
 <!DOCTYPE html>
 <html>
-<head>
+    <head>
+        <link rel="stylesheet" href="tempstyle.css">
+        <title>Create Account</title>
 
-</head>
+        <script 
+            src="https://code.jquery.com/jquery-3.7.1.js" 
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" 
+            crossorigin="anonymous">
+        </script>
+    </head>
 
-<body>
-    <h1>Signup</h1>
+    <body>
+        <div class="wrapper">
+            <form action="http://localhost:3000/api/signup" method="post">
+                <h1>New Account</h1>
+                <div class="input-box">
+                    <label for="name">Username</label>
+                    <input class="input" type="text" id="name" name="name" placeholder="user123" required>
+                </div>
+                <div class="input-box">
+                    <label for="email">Email</label>
+                    <input class="input" type="text" id="email" name="email" placeholder="name@example.com" required>
+                </div>
+                <div class="input-box">
+                    <label for="password">Password</label>
+                    <input class="input" type="password" id="password" name="password" placeholder="********" required>
+                </div>
+                <button class="btn" type="submit">Create Account!</button>
+            </form>
+            <a href="./login.html" class="alr"><br>I have an account already</a>
+        </div>
+    </body>
+    <script>
+        $('document').ready(() => {
+            console.log("hi")
+            let form = $()
+        })
+    </script>
 
-    <form action="/signup" method="post">
-        <div>
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required>
-        </div>
-        <div>
-            <label for="email">Email</label>
-            <input type="text" id="email" name="email" required>
-        </div>
-        <div>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <button type="submit">Register</button>
-    </form>
-    <a href="/login">Login</a>
-</body>
+</html>
 
 
 
