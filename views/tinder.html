@@ -171,12 +171,12 @@
 <body>
     <div id="logo">logo here init</div>
     <div id="container">
-
+        /*left column*/
         <div class="column" id="no_seen">
             <button class="buttons" id="dislike" onclick="no()"><img id="X" src="icons/blackX.png"></button>
             <button class="buttons" id="seenIt" onclick="seen()">I've seen this!</button>
         </div>
-
+        /*center column*/
         <div class="column" id="card">
             
             <img id="poster" src="">
@@ -186,7 +186,7 @@
             </div>
             <p id="allInfo"></p>
         </div>
-
+        /*right column*/
         <div class="column" id="yes_watching">
             <button class="buttons" id="like" onclick="yes()"><img id="heart" src="icons/blankheart.png"></button>
             <button class="buttons" id="amWatching" onclick="watching()">Add to Watchlist!</button>
@@ -195,6 +195,7 @@
 
 
     <script>
+        /*makes description pop up when hovering over poster*/
         document.getElementById('poster').addEventListener("mouseover", function () {
             document.getElementById('desc').style.display = "contents";
             document.getElementById('desc').style.transform = "scale(1,1)";
@@ -205,7 +206,7 @@
             document.getElementById('desc').style.transform = "scale(1,1)";
         });
 
-
+        /*function for registering a movie as already seen*/
         async function seen() {
             //document.getElementById('desc').style.display = "none";
             var mov = document.getElementById('movieTitle').style
@@ -220,6 +221,7 @@
             setTimeout(mov.transform = "revert", 100);
         }
 
+        /*function for adding to watchlist*/
         async function watching() {
             //document.getElementById('desc').style.display = "none";
             var mov = document.getElementById('movieTitle').style
@@ -233,7 +235,7 @@
             setTimeout(mov.transform = "revert", 100);
         }
 
-
+        /*function for if user doesn't like the movie*/
         async function no() {
             document.getElementById('X').src = "icons/redX.png";
             setTimeout(document.getElementById('X').src = "icons/blackX.png", 200);
@@ -249,6 +251,7 @@
             setTimeout(mov.transform = "revert", 100);
         }
 
+        /*function for if user does like the movie*/
         async function yes() {
             document.getElementById('heart').src = "icons/redheart.png";
             setTimeout(document.getElementById('heart').src = "icons/blankheart.png", 200);
