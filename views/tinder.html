@@ -11,7 +11,6 @@
         }
         body {
             background-image: url(https://raw.githubusercontent.com/ermiayn3962/FilmQ/main/views/tinderIcons/tinderBG.png?token=GHSAT0AAAAAACHGMNVKS4IJ66ZHWHQLJBX2ZLWHBSA);
-            background-image: url(https://marjon-journalism.shorthandstories.com/tinder-how-they-keep-you-swiping/assets/SgbRM44jay/tinder-gradient-2560x1440.png);
             background-repeat: no-repeat;
             background-size: cover;
         }
@@ -62,8 +61,8 @@
         #seent {
             transition: 0.2s ease-in-out;
             background: none;
-            height: 55px;
-            width: 55px;
+            height: 40px;
+            width: 40px;
         }
 
         #heart:hover {
@@ -114,8 +113,8 @@
             height: 10vh;
             justify-content: center;
             text-align: center;
-            background: #f08080;
-            background-color: #f08080;
+            background: transparent;
+            /* background-color: #FFB6C1; */
         }
         #logo_logo {
             margin-top: 5px;
@@ -128,7 +127,7 @@
             margin: 0 auto; 
             width: 100vw;
             height: 90vh;
-            background: #f08080;
+            background: transparent;
         }
 
         .column{
@@ -174,8 +173,9 @@
             position: relative;
             margin: 0 auto;
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: #f08080;
+            /* border: 1px dotted rgba(255, 255, 255, 0.1); */
+            border: none;
+            background: transparent;
             padding-top: 20px;
             padding-bottom: 20px;
             margin-bottom: 50px;
@@ -205,7 +205,7 @@
     <div id="container">
        
         <div class="column" id="no_seen">
-            <button class="buttons" id="dislike" onclick="no()"><img id="X" src="tinderIcons/redX.png"></button>
+            <button class="buttons" id="dislike" onclick="no()"><img id="X" src="tinderIcons/blackX.png"></button>
             <button class="buttons" id="seenIt" onclick="seen()"><img id="seent" src="tinderIcons/glasses.png"><div id="seentTxt"><br>(already seen)</div></button>
         </div>
 
@@ -263,7 +263,7 @@
         async function seen() {
             var seenBtn = document.getElementById('seenIt').style;
             seenBtn.background = "skyblue";
-            setTimeout(function(){seenBtn.background = "#f08080";}, 300);
+            setTimeout(function(){seenBtn.background = "transparent";}, 300);
 
             var mov = document.getElementById('movieTitle').style;
             mov.transform = "scale(0,0)";
@@ -280,7 +280,7 @@
         async function watching() {
             var watchingBtn = document.getElementById('amWatching').style;
             watchingBtn.background = "skyblue";
-            setTimeout(function () { watchingBtn.background = "#f08080"; }, 300);
+            setTimeout(function () { watchingBtn.background = "transparent"; }, 300);
 
             var mov = document.getElementById('movieTitle').style
             mov.transform = "scale(0,0)";
@@ -295,12 +295,12 @@
 
 
         async function no() {
-            document.getElementById('X').src = "tinderIcons/blackX.png";
-            setTimeout(function(){ document.getElementById('X').src = "tinderIcons/redX.png";}, 300);
+            document.getElementById('X').src = "tinderIcons/redX.png";
+            setTimeout(function(){ document.getElementById('X').src = "tinderIcons/blackX.png";}, 300);
 
             var noBtn = document.getElementById('dislike').style;
             noBtn.background = "red";
-            setTimeout(function () { noBtn.background = "#f08080"; }, 300);
+            setTimeout(function () { noBtn.background = "transparent"; }, 300);
 
             var mov = document.getElementById('movieTitle').style
             mov.transform = "scale(0,0)";
@@ -319,7 +319,7 @@
 
             var yesBtn = document.getElementById('like').style;
             yesBtn.background = "#50C878";
-            setTimeout(function () { yesBtn.background = "#f08080"; }, 300);
+            setTimeout(function () { yesBtn.background = "transparent"; }, 300);
 
             var mov = document.getElementById('movieTitle').style
             mov.transform = "scale(0,0)";
