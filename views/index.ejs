@@ -6,7 +6,7 @@
       src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"></script>
-    <script src="homepage.js"></script>
+    <!-- <script src="homepage.js"></script> -->
     <style
       rel
       href="styles.css"></style>
@@ -15,21 +15,8 @@
       * {
         margin: 0px;
       }
-      /* header {
-        -webkit-box-align: center;
-        align-items: center;
-        box-shadow: rgba(0, 0, 0, 0) 0px 8px 24px;
-        display: flex;
-        height: 80px;
-        -webkit-box-pack: center;
-        justify-content: center;
-        position: sticky;
-        top: 0px;
-        width: 100vw;
-        z-index: 300;
-      } */
       body {
-        background-color: black;
+        background: linear-gradient(to top, black, rgb(255, 133, 153));
         margin: 0;
         padding: 0;
         font-family: Arial, sans-serif;
@@ -79,6 +66,9 @@
 
       h1 {
         color: white;
+        display: block;
+        margin: 10px;
+        font-size: 30px;
       }
 
       .movies-wrapper {
@@ -94,7 +84,6 @@
         margin-right: 10px; /* Add some spacing between images */
         height: 500px;
         width: 350px;
-        border: red solid 5px;
         scroll-snap-align: start; /* Align to the start of each image */
       }
       .movie:hover {
@@ -110,30 +99,6 @@
         text-align: center;
         color: white;
         margin: 10px;
-      }
-
-      #myModal {
-        color: black;
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        justify-content: center;
-        align-items: center;
-      }
-
-      .modal-content {
-        color: black;
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        max-width: 400px;
-        width: 100%;
-        text-align: center;
       }
 
       .close {
@@ -260,12 +225,85 @@
       .info {
         padding-top: 10px;
       }
+
+      /* Modal stuff*/
+
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: red;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      #streaming {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      #addToList {
+        background-color: #4caf50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+      #movieTitle {
+        font-size: 40px;
+        font-weight: 500;
+        font-kerning: normal;
+        color: #000;
+        text-align: left;
+      }
+      #closeModal {
+        position: absolute;
+        font-size: 48px;
+        top: 10px;
+        right: 10px;
+      }
+
+      #myModal {
+        color: black;
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: left;
+        align-items: left;
+      }
+
+      .modal-content {
+        color: black;
+        background: linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0.9),
+          rgba(255, 255, 255, 0)
+        );
+        padding: 20px;
+        max-width: 800px;
+        width: 100%;
+        text-align: center;
+      }
     </style>
   </head>
 
   <body>
     <header>
-      <h1 class="left-item">FilmQ</h1>
+      <h1 class="left-item">CineSwipe</h1>
       <form class="center-item">
         <input
           type="text"
@@ -293,131 +331,216 @@
     <section>
       <h1>Top Movies</h1>
       <div class="movies-wrapper">
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
+        <div class="movie popular"></div>
+        <div class="movie popular"></div>
+        <div class="movie popular"></div>
+        <div class="movie popular"></div>
+        <div class="movie popular"></div>
+        <div class="movie popular"></div>
+        <div class="movie popular"></div>
+        <div class="movie popular"></div>
+        <div class="movie popular"></div>
       </div>
     </section>
 
     <script>
+        var user = JSON.parse('<%-JSON.stringify(data)%>');
+        console.log(user)
+
       $(() => {
         $(".movie").on("click", openModal);
         $("#closeModal").on("click", closeModal);
       });
-      function openModal() {
+      const images_url = "https://image.tmdb.org/t/p/original/";
+      const providers_images_url = "https://image.tmdb.org/t/p/original";
+
+      async function openModal() {
+        let movieId = $(this).data("id");
+        let movieName = $(this).data("name");
+        let movieBackground = $(this).data("background");
+
+        $("#movieTitle").text(movieName);
+        $("#myModal").css({
+          "background-image": "url(" + images_url + movieBackground + ")",
+          "background-size": "cover",
+          "background-position": "center center",
+          "background-repeat": "no-repeat",
+        });
+
+        const providers = await getProviders(movieId);
+        const usProviders = providers.results.US;
+        try {
+          const streamingProviders = usProviders.flatrate.map((provider) => {
+            return provider;
+          });
+
+          streamingProviders.forEach((provider) => {
+            console.log(provider);
+            let img = $(
+              `<img src="${providers_images_url}${provider.logo_path}">`
+            );
+            img.css({
+              width: "60px",
+            });
+            $("#streaming").append(img);
+          });
+          $("#streaming").append("<br>");
+        } catch (err) {
+          $("#streaming").text("No streaming providers available");
+
+          console.log(err);
+        }
         $("#myModal").css({ display: "flex" });
       }
       function closeModal() {
+        $("#streaming").empty();
         $("#myModal").hide();
       }
+      var toggleStatus = "closed";
 
-      //currently not working
+      function setUp() {
+        //   setTimeout(function () {
+        //     zeroize();
+        //   }, 1500);
+      }
 
-      // function check() {
-      //   alert("incheck");
-      //   if ($("#myModal").is(":visible")) {
-      //     alert("yes");
-      //   }
-      // }
+      function openSidebar() {
+        
 
-      // $(document).click(function (event) {
-      //   var modal = $("#myModal");
+        // $('#your_queue')
+        // let info_list = $('<ul>');
 
-      //   if (modal.is(":visible")) {
-      //     alert("visible");
-      //     // if (!$(event.target).closest(".modal-content").length) {
-      //     //   alert("clicked outside");
+        // let title = $('<li>').text()
 
-      //     //   modal.hide();
-      //     // }
-      //   }
-      // });
+
+        // <li>
+        //   <div class="movie-item">
+        //     <div class="movie-cols">
+        //       <div class="mini-column pic">
+        //         <img
+        //           class="thumbnail"
+        //           src="images/totoro.jpg" />
+        //       </div>
+        //       <div class="mini-column info">
+        //         <ul class="info-list">
+        //           <li class="title"></li>
+        //           <li class="year"></li>
+        //           <li class="genre"></li>
+        //         </ul>
+        //       </div>
+        //     </div>
+        //     <div class="blurb"></div>
+        //   </div>
+        // </li>  
+
+        $("#sidebar").show();
+        if (toggleStatus == "closed") {
+          toggleStatus = "open";
+        }
+      }
+
+      function closeSidebar() {
+        $("#sidebar").hide();
+        if (toggleStatus == "open") {
+          toggleStatus = "closed";
+        }
+      }
+
+      var tmdb_api_key = "e2978d1da72adcf778b7bc358679b035";
+
+      const options = {
+        method: "GET",
+        headers: { accept: "application/json" },
+      };
+
+      const popular_url =
+        "https://api.themoviedb.org/3/discover/movie?api_key=" +
+        tmdb_api_key +
+        "&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc";
+
+      async function getPopular() {
+        try {
+          let response = await fetch(popular_url, options);
+          let data = await response.json();
+          return data;
+        } catch (err) {
+          console.error("error:" + err);
+        }
+      }
+      async function getProviders(movie_id) {
+        const providers_url =
+          "https://api.themoviedb.org/3/movie/" +
+          movie_id +
+          "/watch/providers?api_key=" +
+          tmdb_api_key;
+
+        try {
+          let response = await fetch(providers_url, options);
+          let data = await response.json();
+          console.log(data);
+          return data;
+        } catch (err) {
+          console.error("error:" + err);
+        }
+      }
+      async function setBigImage() {
+        let data = await getPopular();
+        $(".random-big").css({
+          "background-image":
+            "url(" + images_url + data.results[0].backdrop_path + ")",
+          "background-size": "cover",
+          "background-position": "center center",
+          "background-repeat": "no-repeat",
+        });
+      }
+      async function setPopularMovies() {
+        let data = await getPopular();
+        $(".movie.popular").each(function (index) {
+          if (index < data.results.length) {
+            $(this).css({
+              "background-image":
+                "url(" + images_url + data.results[index].poster_path + ")",
+              "background-size": "cover",
+              "background-position": "center center",
+              "background-repeat": "no-repeat",
+            });
+            $(this).attr("data-id", data.results[index].id);
+            $(this).attr("data-name", data.results[index].title);
+            $(this).attr("data-background", data.results[index].backdrop_path);
+          }
+        });
+      }
+      setBigImage();
+      setPopularMovies();
+      // setTinderMovies();
     </script>
 
     <section>
       <h1>Your Picks</h1>
       <div class="movies-wrapper">
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
-        <div class="movie">
-          <h4>Movie</h4>
-          <img alt="Movie here" />
-        </div>
+        <div class="movie"></div>
+        <div class="movie"></div>
+        <div class="movie"></div>
+        <div class="movie"></div>
+        <div class="movie"></div>
+        <div class="movie"></div>
+        <div class="movie"></div>
+        <div class="movie"></div>
+        <div class="movie"></div>
       </div>
     </section>
 
     <div id="myModal">
       <div class="modal-content">
+        <h2 id="movieTitle"></h2>
         <span
           class="close"
           id="closeModal"
           >&times;
         </span>
-        <h2>Modal Content</h2>
-        <p>This is a simple modal example.</p>
+        <h2 class="stream-title">Where to stream</h2>
+        <ul id="streaming"></ul>
+        <button id="addToList">Add to watchlist</button>
       </div>
     </div>
 
@@ -445,68 +568,21 @@
               </div>
               <div class="mini-column info">
                 <ul class="info-list">
-                  <li class="title">Totoro</li>
-                  <li class="year">1988</li>
-                  <li class="genre">Anime</li>
+                  <li class="title"></li>
+                  <li class="year"></li>
+                  <li class="genre"></li>
                 </ul>
               </div>
             </div>
-            <div class="blurb">
-              My Neighbor Totoro is a 1988 Japanese animated fantasy film
-              written and directed by Hayao Miyazaki and animated by Studio
-              Ghibli for Tokuma Shoten.
-            </div>
+            <div class="blurb"></div>
           </div>
-        </li>
-
-        <li>
-          <div class="movie-item">
-            <div class="movie-cols">
-              <div class="mini-column pic">
-                <img
-                  class="thumbnail"
-                  src="images/totoro.jpg" />
-              </div>
-              <div class="mini-column info">
-                <ul class="info-list">
-                  <li class="title">Totoro</li>
-                  <li class="year">1988</li>
-                  <li class="genre">Anime</li>
-                </ul>
-              </div>
-            </div>
-            <div class="blurb">
-              My Neighbor Totoro is a 1988 Japanese animated fantasy film
-              written and directed by Hayao Miyazaki and animated by Studio
-              Ghibli for Tokuma Shoten.
-            </div>
-          </div>
-        </li>
-
-        <li>
-          <div class="movie-item">
-            <div class="movie-cols">
-              <div class="mini-column pic">
-                <img
-                  class="thumbnail"
-                  src="images/totoro.jpg" />
-              </div>
-              <div class="mini-column info">
-                <ul class="info-list">
-                  <li class="title">Totoro</li>
-                  <li class="year">1988</li>
-                  <li class="genre">Anime</li>
-                </ul>
-              </div>
-            </div>
-            <div class="blurb">
-              My Neighbor Totoro is a 1988 Japanese animated fantasy film
-              written and directed by Hayao Miyazaki and animated by Studio
-              Ghibli for Tokuma Shoten.
-            </div>
-          </div>
-        </li>
-      </ul>
+        </li>  
+    </ul>
     </div>
   </body>
+  <script>
+    $("document").ready(()=> {
+
+    })
+  </script>
 </html>

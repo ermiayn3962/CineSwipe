@@ -17,7 +17,7 @@ async function connect() {
         await mongoose.connect(process.env.URI, {dbName: 'CineSwipe'});
         console.log("Connected to MongoDB");
     } catch (error) {
-        chonsole.log(error);
+        console.log(error);
     }
 }
 
@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
     name : String,
     email : String,
     password : String,
-    recs : [String],
+    recs : [Number],
     watchlist : [String]
 })
 
@@ -68,6 +68,7 @@ app.use(passport.session());
 /* Post Routes */
 app.post('/login', passport.authenticate('local', {
     successRedirect: '/homepage-intermediary',
+    // successRedirect: '/cineSwipe',
     failureRedirect: '/login',
     failureFlash: true
 }))
@@ -97,9 +98,6 @@ app.post('/signup', async (req, res) => {
                    console.log(error)
                 } else {
                     console.log("User inserted to DB successfully");
-                    // res.json({
-                    //     message: 'User created successfully'}
-                    // );
 
                 }
             });
@@ -114,10 +112,11 @@ app.post('/signup', async (req, res) => {
 })
 
 
-
 /* Get Routes */
-app.get('/', (req, res) => {
-    res.render('index')
+app.get('/', async (req, res) => {
+    let user = await req.user
+
+    res.render('index', {data : user})
 })
 
 app.get('/homepage-intermediary', async (req, res) => {
@@ -141,9 +140,24 @@ app.get('/login', (req, res) => {
 app.get('/signup', (req, res) => {
     res.render('signup')
 })
-app.get('/cineSwipe', (req, res) => {
-    console.log(req.user)
-    res.render('cineSwipe')
+app.get('/cineSwipe', async (req, res) => {
+    let user = await req.user
+    // console.log("data going to pass", JSON.stringify(user))
+    res.render('cineSwipe', {data : user})
+})
+
+
+
+/* Functions */
+
+app.post('/api/updateUser', async (req, res) => {
+    let user = await req.body
+    console.log ("this is the param", user)
+    console.log(user.email)
+
+    await User.updateOne({email: user.email}, user)
+    let updated_user = await User.findOne({email: user.email})
+    res.send(updated_user)
 })
 
 app.listen(3000, () => console.log("Server starting on port 3000"))

@@ -148,7 +148,7 @@
             background: rgba(205, 92, 92, 0.1);
         }
 
-        #like {
+        /* #like {
             
         }
         #dislike {
@@ -159,13 +159,10 @@
         }
         #amWatching{
 
-        }
+        } */
 
 
     </style>
-    <!--<script src="./tinder.js">
-            
-        </script>-->
 </head>
 
 <body>
@@ -195,6 +192,8 @@
 
 
     <script>
+        var user = JSON.parse('<%-JSON.stringify(data)%>');
+
         /*makes description pop up when hovering over poster*/
         document.getElementById('poster').addEventListener("mouseover", function () {
             document.getElementById('desc').style.display = "contents";
@@ -229,10 +228,16 @@
             var image = document.getElementById('poster').style;
             image.border = "10px solid #a40000";
             image.transform = "translateY(250%) scale(0,0)";
-            await get_info();
+            let movieDatum = await get_info();
             image.border = "none";
             setTimeout(image.transform = "revert", 100);
             setTimeout(mov.transform = "revert", 100);
+
+            user.watchlist.push(movieDatum.id)
+            console.log(user);
+            user = await updateUserInfo(user);
+            console.log("this is the data passed from updateUser", user)
+
         }
 
         /*function for if user doesn't like the movie*/
@@ -261,10 +266,15 @@
             var image = document.getElementById('poster').style;
             image.border = "10px solid #7CFC00";
             image.transform = "translateX(300%) scale(0,0) rotate(30deg)";
-            await get_info();
+            let movieDatum = await get_info();
             image.border = "none";
             setTimeout(image.transform = "revert", 100);
             setTimeout(mov.transform = "revert", 100);
+
+            user.recs.push(movieDatum.id)
+            console.log(user);
+            user = await updateUserInfo(user);
+            console.log("this is the data passed from updateUser", user)
 
 
         }
@@ -326,9 +336,27 @@
             }
             
             document.getElementById('desc').innerHTML = blurb;
+
+            return movieDatum
         }
 
         document.addEventListener("load", get_info());
+
+        async function updateUserInfo (user) {
+            console.log("data to be sent back", user)
+            var data = await fetch("api/updateUser", {
+                method: 'POST',
+                body: JSON.stringify(user),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            // .then(json => console.log("data sent back", json))
+            
+            console.log("data received", data)
+            return data;
+        }
     </script>
 </body>
 

@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 
 
-async function getRecommendation(movieID, user) {
+async function getRecommendation(movieID) {
 
   /* Getting Current Recs for User from API */
     const url = 'https://api.themoviedb.org/3/movie/' + movieID + '/recommendations?language=en-US&page=1';
@@ -48,10 +48,11 @@ async function searchMovie(key) {
     }
   };
   
-  fetch(url, options)
+  return await fetch(url, options)
     .then(res => res.json())
     .then(json => console.log(json))
     .catch(err => console.error('error:' + err));
 
+    
 }
 
