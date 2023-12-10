@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" href="tempstyle.css">
+    <style>
+   
+    </style>
+    </head>
+
+    <body>
+
+        <div class="wrapper">
+            <form action="/login" method="post">
+                <h1>Login</h1>
+                <div class="input-box">
+                    <label for="email">Email</label>
+                    <input class="input" type="text" id="email" name="email" required placeholder="name@example.com"/>
+                </div>
+                <div class="input-box">
+                    <label for="password">Password</label>
+                    <input class="input" type="password" id="password" name="password" required placeholder="********" />
+                </div>
+                <div id="errorMessage" style="margin-bottom: 10px;">
+                    <%= message.error %>
+                </div>
+                <button class="btn" type="submit">Login</button>
+            </form>
+            <a href="/signup" class="alr"><br>I don't have an account yet</a>
+        </div>
+    </body>
+
+</html>

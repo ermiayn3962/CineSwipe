@@ -9,11 +9,12 @@ const passport = require('passport');
 const flash = require('express-flash');
 const session = require('express-session');
 const path = require('path');
+const cineSwipe = require('./api.js')
 
 /* Connecting to database */
 async function connect() {
     try {
-        await mongoose.connect(process.env.URI, {dbName: 'filmQ'});
+        await mongoose.connect(process.env.URI, {dbName: 'CineSwipe'});
         console.log("Connected to MongoDB");
     } catch (error) {
         chonsole.log(error);
@@ -43,9 +44,10 @@ initializePassport(
     async id => await User.findOne({id: id})
 );
 
+
+
 /* Setting app uses */
-app.set('views', 'views');
-app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -62,45 +64,17 @@ app.use((req, res, next) => {
 })
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use(express.static(path.join(__dirname, "views")))
     
-/* API Calls */
-app.get('/api/user', async(req, res) => {
-    var user = await req.user;
-    console.log('inside user');
-    console.log(user);
-    // res.json(user)
-    res.redirect('/index?data=' + `${JSON.stringify(user)}`)
-
-})
-
-app.get('/index', (req, res) => {
-    let data = JSON.parse(req.query.data)
-    console.log("data is", data);
-    res.sendFile(__dirname + "/views/index.html")
-})
-
-app.post('/api/login', passport.authenticate('local', {
-    successRedirect: '/api/user',
-    failureRedirect: '/api/errorMessage',
+/* Post Routes */
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/homepage-intermediary',
+    failureRedirect: '/login',
     failureFlash: true
 }))
 
-app.get('/api/errorMessage', (req, res) => {
-    console.log("in errors")
-    res.send(res.locals.message)
-})
-
 
 // Adding user information to database
-app.post('/api/signup', async (req, res) => {
-    console.log("inside signup")
-    console.log(req.body.name)
-    console.log(req.body.email)
-    console.log(req.body.password)
-
-
+app.post('/signup', async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
@@ -113,37 +87,63 @@ app.post('/api/signup', async (req, res) => {
             watchlist: []
         })
 
-        console.log(data)
-
         /* Checking if user already exists */
         user = await User.findOne({email : data.email});
-        console.log(user)
+
         if (user == null) {
-            console.log('before ')
+
             db.collection('users').insertOne(data, (error, collection) => {
                 if (error) {
-                    res.json({
-                        message: error
-                    });
+                   console.log(error)
                 } else {
                     console.log("User inserted to DB successfully");
-                    res.json({
-                        message: 'User created successfully'}
-                    );
-                    
+                    // res.json({
+                    //     message: 'User created successfully'}
+                    // );
 
                 }
             });
         } else {
-            res.json({
-                message: 'User already exists'}
-             );
+            req.flash('error', 'User already exists');
+            
         }
+        res.redirect('/login')
     } catch {
-        res.json({
-            message: 'User already exists'}
-         );
+        res.redirect('/signup')
     }
+})
+
+
+
+/* Get Routes */
+app.get('/', (req, res) => {
+    res.render('index')
+})
+
+app.get('/homepage-intermediary', async (req, res) => {
+    let user = await req.user
+
+    if (user.recs.length == 0) {
+        res.redirect('/cineSwipe')
+    } else {
+        res.redirect('/')
+    }
+})
+
+app.get('/login', (req, res) => {
+    if (res.locals.message) {
+        res.render('login', {message: res.locals.message})
+    } else {
+        res.render('login')
+    }
+})
+
+app.get('/signup', (req, res) => {
+    res.render('signup')
+})
+app.get('/cineSwipe', (req, res) => {
+    console.log(req.user)
+    res.render('cineSwipe')
 })
 
 app.listen(3000, () => console.log("Server starting on port 3000"))

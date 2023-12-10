@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> animation test </title>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <style>
+        * {
+            z-index: 1;
+
+        }
+        #poster {
+            max-height: 500px;
+            max-width: 375px;
+            position: relative;
+            z-index: -1;
+        }
+
+        #movieTitle,
+        #desc {
+            position: relative;
+            z-index: -1;
+            color: #fff;
+            max-width: 400px;
+
+            text-align: center;
+            transition: 0.1s;
+        }
+
+        #movieTitle {
+            font-size: 25px;
+            font-weight: 600;
+
+        }
+
+        #titleWrapper {
+            max-width: 420px;
+
+        }
+
+        #desc {
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            font-size: 16px;
+            display: none;
+            transition: 0.1s ease-in-out;
+        }
+
+        #heart,
+        #X {
+            transition: 0.2s ease-in-out;
+            background: none;
+            height: 30px;
+            width: 30px;
+        }
+
+        #heart:hover {
+            transform: scale(1.05, 1.05);
+        }
+
+        #X:hover {
+            transform: scale(1.05, 1.05);
+        }
+
+        
+
+        #poster {
+            transition: 0.3s;
+            border: 0px solid #AFE1AF;
+            border-radius: 10px;
+        }
+
+
+        #allInfo {
+            display: none;
+        }
+
+        #desc_wrapper {
+            max-width: 400px;
+            position: relative;
+            z-index: -1;
+            display: inline-block;
+            justify-content: center;
+        }
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*------------------------------three column layout---------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+        #logo {
+            width: 100vw;
+            height: 13vh;
+            justify-content: center;
+            background: #f08080;
+            background-color: #f08080;
+        }
+
+        #container {
+            position: relative;
+            margin: 0 auto; 
+            width: 100vw;
+            height: 87vh;
+            background: #f08080;
+        }
+
+        .column{
+            float: left;
+        }
+
+        #card {
+            margin-top: 5px;
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: -1;
+        }
+
+        #yes_watching {
+            margin-top: 20vh;
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            
+        }
+
+        #no_seen {
+            margin-top: 20vh;
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            
+        }
+
+        .buttons {
+            width: 100px;
+            height: 100px;
+            
+            position: relative;
+            margin: 0 auto;
+            border-radius: 20px;
+            border: none;
+            background: rgba(205, 92, 92, 0.1);
+        }
+
+        #like {
+            
+        }
+        #dislike {
+            
+        }
+        #seenIt{
+
+        }
+        #amWatching{
+
+        }
+
+
+    </style>
+    <!--<script src="./tinder.js">
+            
+        </script>-->
+</head>
+
+<body>
+    <div id="logo">logo here init</div>
+    <div id="container">
+        /*left column*/
+        <div class="column" id="no_seen">
+            <button class="buttons" id="dislike" onclick="no()"><img id="X" src="icons/blackX.png"></button>
+            <button class="buttons" id="seenIt" onclick="seen()">I've seen this!</button>
+        </div>
+        /*center column*/
+        <div class="column" id="card">
+            
+            <img id="poster" src="">
+            <label id="movieTitle" for="poster"></label>
+            <div id="desc_wrapper">
+                <p id="desc"></p>
+            </div>
+            <p id="allInfo"></p>
+        </div>
+        /*right column*/
+        <div class="column" id="yes_watching">
+            <button class="buttons" id="like" onclick="yes()"><img id="heart" src="icons/blankheart.png"></button>
+            <button class="buttons" id="amWatching" onclick="watching()">Add to Watchlist!</button>
+        </div>
+    </div>
+
+
+    <script>
+        /*makes description pop up when hovering over poster*/
+        document.getElementById('poster').addEventListener("mouseover", function () {
+            document.getElementById('desc').style.display = "contents";
+            document.getElementById('desc').style.transform = "scale(1,1)";
+        });
+
+        document.getElementById('poster').addEventListener("mouseout", function () {
+            document.getElementById('desc').style.display = "none";
+            document.getElementById('desc').style.transform = "scale(1,1)";
+        });
+
+        /*function for registering a movie as already seen*/
+        async function seen() {
+            //document.getElementById('desc').style.display = "none";
+            var mov = document.getElementById('movieTitle').style
+            mov.transform = "scale(0,0)";
+            var image = document.getElementById('poster').style;
+            image.border = "10px solid #a40000";
+
+            image.transform = "translateX(200%) translateY(150%) scale(0,0)";
+            await get_info();
+            image.border = "none";
+            setTimeout(image.transform = "revert", 100);
+            setTimeout(mov.transform = "revert", 100);
+        }
+
+        /*function for adding to watchlist*/
+        async function watching() {
+            //document.getElementById('desc').style.display = "none";
+            var mov = document.getElementById('movieTitle').style
+            mov.transform = "scale(0,0)";
+            var image = document.getElementById('poster').style;
+            image.border = "10px solid #a40000";
+            image.transform = "translateY(250%) scale(0,0)";
+            await get_info();
+            image.border = "none";
+            setTimeout(image.transform = "revert", 100);
+            setTimeout(mov.transform = "revert", 100);
+        }
+
+        /*function for if user doesn't like the movie*/
+        async function no() {
+            document.getElementById('X').src = "icons/redX.png";
+            setTimeout(document.getElementById('X').src = "icons/blackX.png", 200);
+
+            var mov = document.getElementById('movieTitle').style
+            mov.transform = "scale(0,0)";
+            var image = document.getElementById('poster').style;
+            image.border = "10px solid #a40000";
+            image.transform = "translateX(-300%) scale(0.0,0.0) rotate(-30deg)";
+            await get_info();
+            image.border = "none";
+            setTimeout(image.transform = "revert", 100);
+            setTimeout(mov.transform = "revert", 100);
+        }
+
+        /*function for if user does like the movie*/
+        async function yes() {
+            document.getElementById('heart').src = "icons/redheart.png";
+            setTimeout(document.getElementById('heart').src = "icons/blankheart.png", 200);
+
+            var mov = document.getElementById('movieTitle').style
+            mov.transform = "scale(0,0)";
+            var image = document.getElementById('poster').style;
+            image.border = "10px solid #7CFC00";
+            image.transform = "translateX(300%) scale(0,0) rotate(30deg)";
+            await get_info();
+            image.border = "none";
+            setTimeout(image.transform = "revert", 100);
+            setTimeout(mov.transform = "revert", 100);
+
+
+        }
+
+        const tmdb_api_key = "e2978d1da72adcf778b7bc358679b035";
+        const link = 'https://api.themoviedb.org/3/discover/movie/?api_key=';
+        const options = { method: "GET", headers: { accept: "application/json" } };
+        const genres = [null, 28, 12, 16, 35, 80, 99, 18, 10751, 14, 36, 27, 10402, 9648, 10749, 878, 10770, 53, 10752, 37];
+        //const pgs = [null, 1902, 1039, 2458, 6200, 1537, 7092, 10149, 1207, 973, 757, 2233, 1830, 874, 2352, 919, 1131, 2080, 486, 419];
+        const max_pgs = [null, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 486, 419];
+    
+
+
+        async function randomMovie() {
+            var rand = randomInt(1, genres.length - 1);
+            var category = genres[rand];
+            var maxPage = max_pgs[rand];
+            var page = randomInt(1, maxPage);
+            var callAPI = link + tmdb_api_key + '&with_genres=' + category + '&page=' + page + '&include_adult=false';
+            //console.log("category: " + category + ", page: " + page + ", rand: " +rand);
+            try {
+                let response = await fetch(callAPI, options);
+                let data = await response.json();
+                rand2 = randomInt(1, data.results.length - 1);
+                return data.results[rand2];
+            } catch (err) {
+                console.error("error:" + err);
+            }
+        }
+
+        function randomInt(min, max) { // min and max included 
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        }
+
+        var movieDatum;
+
+        var title_poster_desc = [];
+
+        /*function called by html, gets random movie and writes its poster, title, and description to the page*/
+        async function get_info() {
+            movieDatum = await randomMovie();
+
+            //title_poster_desc = [movieDatum["title"], movieDatum["poster_path"], movieDatum["overview"]];
+
+            //console.log(title_poster_desc);
+            var imgLink = 'https://image.tmdb.org/t/p/original' + movieDatum["poster_path"];
+            document.getElementById('poster').src = imgLink;
+            document.getElementById('movieTitle').innerHTML = movieDatum["title"];
+            //var movieInfoString = JSON.stringify(movieDatum);
+            //document.getElementById('allInfo').innerHTML = movieDatum;
+            var description = movieDatum["overview"];
+            var firstSentence = description.split(". ");
+            var blurb = firstSentence[0] + "."
+            if (firstSentence.length > 1) {
+                blurb += " " + firstSentence[1] + "..."; 
+            }
+            else{ 
+                blurb += "..";
+            }
+            
+            document.getElementById('desc').innerHTML = blurb;
+        }
+
+        document.addEventListener("load", get_info());
+    </script>
+</body>
+
+</html>

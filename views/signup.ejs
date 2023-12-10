@@ -13,7 +13,7 @@
 
     <body>
         <div class="wrapper">
-            <form >
+            <form action="/signup" method="post">
                 <h1>New Account</h1>
                 <div class="input-box">
                     <label for="name">Username</label>
@@ -27,14 +27,14 @@
                     <label for="password">Password</label>
                     <input class="input" type="password" id="password" name="password" placeholder="********" required>
                 </div>
-                <div id="errorMessage" style="margin-bottom: 10px;"></div>
+                
                 <button class="btn" type="submit">Create Account</button>
             </form>
-            <a href="./login.html" class="alr"><br>I have an account already</a>
+            <a href="/login" class="alr"><br>I have an account already</a>
         </div>
     </body>
     
-    <script>
+    <!-- <script>
         $('document').ready(() => {
             console.log("hi")
             let form = $("form").on('submit', async (e) => {
@@ -70,7 +70,7 @@
                 }
             })
         })
-    </script>
+    </script> -->
 
 </html>
 

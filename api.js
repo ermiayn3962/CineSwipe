@@ -1,10 +1,11 @@
 const fetch = require('node-fetch');
 require('dotenv').config()
+const mongoose = require('mongoose');
 
-var recs
-recs = getRecommendation(49022)
 
-async function getRecommendation(movieID) {
+
+
+async function getRecommendation(movieID, user) {
 
   /* Getting Current Recs for User from API */
     const url = 'https://api.themoviedb.org/3/movie/' + movieID + '/recommendations?language=en-US&page=1';
@@ -16,41 +17,24 @@ async function getRecommendation(movieID) {
        
       }
     };
+    var currentRecs = user.recs
 
-    fetch(url, options)
+    var data = await fetch(url, options)
         .then(res => res.json())
         .then(json => {
             // console.log(json)
-            var currentRecs = [];
             var data = json.results;
-            data.forEach((item) => {
-                currentRecs.push(item.title);
+            data.forEach( async (item) => {
+                currentRecs.push(await item.title);
             });
 
-            console.log(currentRecs)
+            return currentRecs
         })
         .catch(err => console.error('error:' + err))
-
-        
-    // var data;
-    // const returnStuff = async () => {
-    //     data = await info;
-    //     console.log("about to print")
-    //     // console.log(data)
-    //     return data
-    // }
-
-    // data = await returnStuff;
-    // // console.log (data)
-
-    // return data;
-
-
-   
-
+    
     // console.log(data)
-    // return await data
-   
+    return data
+
 }
 
 /* Searching for movie */
@@ -60,7 +44,7 @@ async function searchMovie(key) {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNTMzYmUwNTdhYjMxOTJjMWEyNTQyYTEyZWU5YTFlNCIsInN1YiI6IjY1NmY0ZWIxMDg1OWI0MDEzOTUzNWJmOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.rbNhIQ_fM_lX8m2UgPb2jenhB2j7Z_g0b_A7rLxav-w'
+      Authorization: TMBD_API_KEY
     }
   };
   
