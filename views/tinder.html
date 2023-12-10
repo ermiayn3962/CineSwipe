@@ -31,6 +31,7 @@
             color: #fff;
             max-width: 400px;
             
+            
             text-align: center;
             transition: 0.1s;
         }
@@ -58,8 +59,7 @@
 
         #heart,
         #X, 
-        #queue,
-        #seent {
+        #queue {
             transition: 0.2s ease-in-out;
             background: none;
             height: 55px;
@@ -120,6 +120,7 @@
         #logo_logo {
             margin-top: 5px;
             margin-bottom: 5px;
+            max-height: 77px;
         }
 
         #container {
@@ -143,6 +144,7 @@
             justify-content: center;
             position: relative;
             z-index: -1;
+            
             
         }
 
@@ -171,26 +173,22 @@
             width: 100%;
             position: relative;
             margin: 0 auto;
-            border-radius: 25px;
-            /* border: 1px dotted rgba(255, 255, 255, 0.1); */
-            border: none;
-            background: rgba(205, 92, 92, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #f08080;
             padding-top: 20px;
             padding-bottom: 20px;
+            margin-bottom: 50px;
+            transition: 0.1s ease-in-out;
+            color: #fff;
+            font-weight: 600;
         }
 
-        #like {
-            
+        #listTxt{
+            display: none;
         }
-        #dislike {
-            
-        }
-        #seenIt{
 
-        }
-        #amWatching{
-
-        }
+        
 
 
     </style>
@@ -204,8 +202,8 @@
     <div id="container">
        
         <div class="column" id="no_seen">
-            <button class="buttons" id="dislike" onclick="no()"><img id="X" src="tinderIcons/blackX.png"></button>
-            <button class="buttons" id="seenIt" onclick="seen()"><img id="seent" src="tinderIcons/glasses.png"><div id="seentTxt"><br>already seen</div></button>
+            <button class="buttons" id="dislike" onclick="no()"><img id="X" src="tinderIcons/redX.png"></button>
+            <button class="buttons" id="seenIt" onclick="seen()">I've seen this!</button>
         </div>
 
         
@@ -222,7 +220,7 @@
         
         <div class="column" id="yes_watching">
             <button class="buttons" id="like" onclick="yes()"><img id="heart" src="tinderIcons/blankheart.png"></button>
-            <button class="buttons" id="amWatching" onclick="watching()"><img id="queue" src="tinderIcons/list.png"><div id="listTxt"><br>add to list</div></button>
+            <button class="buttons" id="amWatching" onclick="watching()"><img id="queue" src="tinderIcons/list.png"><div id="listTxt"><br>(add to watchlist)</div></button>
         </div>
     </div>
 
@@ -240,11 +238,20 @@
             document.getElementById('desc').style.transform = "scale(1,1)";
         });
 
+        document.getElementById('amWatching').addEventListener("mouseover", function () {
+                document.getElementById('listTxt').style.display = "contents";
+                document.getElementById('listTxt').style.transform = "scale(1,1)";
+            });
+        document.getElementById('amWatching').addEventListener("mouseout", function () {
+                document.getElementById('listTxt').style.display = "none";
+                document.getElementById('listTxt').style.transform = "scale(1,1)";
+            });
+
 
         async function seen() {
             var seenBtn = document.getElementById('seenIt').style;
             seenBtn.background = "skyblue";
-            setTimeout(function(){seenBtn.background = "transparent";}, 300);
+            setTimeout(function(){seenBtn.background = "#f08080";}, 200);
 
             var mov = document.getElementById('movieTitle').style;
             mov.transform = "scale(0,0)";
@@ -261,7 +268,7 @@
         async function watching() {
             var watchingBtn = document.getElementById('amWatching').style;
             watchingBtn.background = "skyblue";
-            setTimeout(function () { watchingBtn.background = "transparent"; }, 300);
+            setTimeout(function () { watchingBtn.background = "#f08080"; }, 200);
 
             var mov = document.getElementById('movieTitle').style
             mov.transform = "scale(0,0)";
@@ -276,12 +283,12 @@
 
 
         async function no() {
-            document.getElementById('X').src = "tinderIcons/redX.png";
-            setTimeout(function(){ document.getElementById('X').src = "tinderIcons/blackX.png";}, 300);
+            document.getElementById('X').src = "tinderIcons/blackX.png";
+            setTimeout(function(){ document.getElementById('X').src = "tinderIcons/redX.png";}, 200);
 
             var noBtn = document.getElementById('dislike').style;
             noBtn.background = "red";
-            setTimeout(function () { noBtn.background = "transparent"; }, 300);
+            setTimeout(function () { noBtn.background = "#f08080"; }, 200);
 
             var mov = document.getElementById('movieTitle').style
             mov.transform = "scale(0,0)";
@@ -296,11 +303,11 @@
 
         async function yes() {
             document.getElementById('heart').src = "tinderIcons/redheart.png";
-            setTimeout(function(){ document.getElementById('heart').src = "tinderIcons/blankheart.png";}, 300);
+            setTimeout(function(){ document.getElementById('heart').src = "tinderIcons/blankheart.png";}, 200);
 
             var yesBtn = document.getElementById('like').style;
             yesBtn.background = "#50C878";
-            setTimeout(function () { yesBtn.background = "transparent"; }, 300);
+            setTimeout(function () { yesBtn.background = "#f08080"; }, 200);
 
             var mov = document.getElementById('movieTitle').style
             mov.transform = "scale(0,0)";
