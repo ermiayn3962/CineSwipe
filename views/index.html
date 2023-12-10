@@ -309,6 +309,8 @@
         $(".movie").on("click", openModal);
         $("#closeModal").on("click", closeModal);
       });
+      const images_url = "https://image.tmdb.org/t/p/original/";
+      const providers_images_url = "https://image.tmdb.org/t/p/original";
 
       async function openModal() {
         let movieId = $(this).data("id");
@@ -316,9 +318,22 @@
         const usProviders = providers.results.US;
         try {
           const streamingProviders = usProviders.flatrate.map((provider) => {
-            return provider.provider_name;
+            return provider;
           });
-          $("#streaming").text(streamingProviders.join(", "));
+
+          streamingProviders.forEach((provider) => {
+            console.log(provider);
+            let img = $(
+              `<img src="${providers_images_url}${provider.logo_path}">`
+            );
+            img.css({
+              width: "60px",
+            });
+            $("#streaming").append(img);
+          });
+
+          // $("#streaming").text(streamingProviders.join(", "));
+          $("#streaming").append("<br>");
         } catch (err) {
           $("#streaming").text("No streaming providers available");
 
@@ -327,6 +342,7 @@
         $("#myModal").css({ display: "flex" });
       }
       function closeModal() {
+        $("#streaming").empty();
         $("#myModal").hide();
       }
       var toggleStatus = "closed";
@@ -362,8 +378,6 @@
         "https://api.themoviedb.org/3/discover/movie?api_key=" +
         tmdb_api_key +
         "&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc";
-
-      const images_url = "https://image.tmdb.org/t/p/original/";
 
       async function getPopular() {
         try {
@@ -442,8 +456,8 @@
           id="closeModal"
           >&times;
         </span>
-        <h2>Modal Content</h2>
-        <p id="streaming">This is a simple modal example.</p>
+        <h2>Where to stream</h2>
+        <ul id="streaming"></ul>
       </div>
     </div>
 
