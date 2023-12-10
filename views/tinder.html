@@ -10,12 +10,14 @@
             z-index: 1;
 
         }
+
         body {
             background-image: url(https://raw.githubusercontent.com/ermiayn3962/FilmQ/main/views/tinderIcons/tinderBG.png?token=GHSAT0AAAAAACHGMNVKS4IJ66ZHWHQLJBX2ZLWHBSA);
             background-image: url(https://marjon-journalism.shorthandstories.com/tinder-how-they-keep-you-swiping/assets/SgbRM44jay/tinder-gradient-2560x1440.png);
             background-repeat: no-repeat;
             background-size: cover;
         }
+
         #poster {
             max-height: 500px;
             max-width: 350px;
@@ -30,8 +32,7 @@
             z-index: -1;
             color: #fff;
             max-width: 400px;
-            
-            
+
             text-align: center;
             transition: 0.1s;
         }
@@ -39,7 +40,7 @@
         #movieTitle {
             font-size: 25px;
             font-weight: 600;
-            
+
             padding: 5px;
         }
 
@@ -58,7 +59,7 @@
         }
 
         #heart,
-        #X, 
+        #X,
         #queue,
         #seent {
             transition: 0.2s ease-in-out;
@@ -83,11 +84,11 @@
             transform: scale(1.05, 1.05);
         }
 
-        
+
 
         #poster {
             transition: 0.3s;
-            
+
             border-radius: 10px;
             border: 2px solid rgba(255, 255, 255, 0.1);
         }
@@ -104,35 +105,39 @@
             display: inline-block;
             justify-content: center;
         }
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/*------------------------------three column layout---------------------------*/
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
+
+        /*----------------------------------------------------------------------------*/
+        /*----------------------------------------------------------------------------*/
+        /*------------------------------three column layout---------------------------*/
+        /*----------------------------------------------------------------------------*/
+        /*----------------------------------------------------------------------------*/
         #logo {
             width: 100vw;
-            height: 10vh;
-            height: 10vh;
+            height: 120px;
             justify-content: center;
             text-align: center;
             background: transparent;
             /* background-color: #FFB6C1; */
         }
+
         #logo_logo {
             margin-top: 5px;
             margin-bottom: 5px;
-            max-height: 77px;
+            max-height: 110px;
+            z-index: -2;
+            top: 0;
+            position: relative;
         }
 
         #container {
             position: relative;
-            margin: 0 auto; 
+            margin: 0 auto;
             width: 100vw;
             height: 90vh;
             background: transparent;
         }
 
-        .column{
+        .column {
             float: left;
         }
 
@@ -145,8 +150,7 @@
             justify-content: center;
             position: relative;
             z-index: -1;
-            
-            
+
         }
 
         #yes_watching {
@@ -155,7 +159,7 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            
+
         }
 
         #no_seen {
@@ -164,7 +168,7 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            
+
         }
 
         .buttons {
@@ -186,16 +190,12 @@
             font-weight: 600;
         }
 
-        #listTxt, #seentTxt{
+        #listTxt,
+        #seentTxt {
             display: none;
             text-align: center;
             font-weight: 300;
         }
-
-        
-        
-
-
     </style>
     <!--<script src="./tinder.js">
             
@@ -203,17 +203,19 @@
 </head>
 
 <body>
-    <div id="logo"><img src="" alt="logo here" id="logo_logo"></div>
+    <div id="logo"><img src="tinderIcons/cineswipe-logo.png" alt="logo here" id="logo_logo"></div>
     <div id="container">
-       
+
         <div class="column" id="no_seen">
             <button class="buttons" id="dislike" onclick="no()"><img id="X" src="tinderIcons/blackX.png"></button>
-            <button class="buttons" id="seenIt" onclick="seen()"><img id="seent" src="tinderIcons/glasses.png"><div id="seentTxt"><br>already seen</div></button>
+            <button class="buttons" id="seenIt" onclick="seen()"><img id="seent" src="tinderIcons/glasses.png">
+                <div id="seentTxt"><br>already seen</div>
+            </button>
         </div>
 
-        
+
         <div class="column" id="card">
-            
+
             <img id="poster" src="">
             <label id="movieTitle" for="poster"></label>
             <div id="desc_wrapper">
@@ -222,16 +224,17 @@
             <p id="allInfo"></p>
         </div>
 
-        
+
         <div class="column" id="yes_watching">
             <button class="buttons" id="like" onclick="yes()"><img id="heart" src="tinderIcons/blankheart.png"></button>
-            <button class="buttons" id="amWatching" onclick="watching()"><img id="queue" src="tinderIcons/list.png"><div id="listTxt"><br>add to list</div></button>
+            <button class="buttons" id="amWatching" onclick="watching()"><img id="queue" src="tinderIcons/list.png">
+                <div id="listTxt"><br>add to list</div>
+            </button>
         </div>
     </div>
 
 
     <script>
-        /*left column*/
         /*left column*/
         document.getElementById('poster').addEventListener("mouseover", function () {
             document.getElementById('desc').style.display = "contents";
@@ -244,28 +247,28 @@
         });
 
         document.getElementById('amWatching').addEventListener("mouseover", function () {
-                document.getElementById('listTxt').style.display = "contents";
-                document.getElementById('listTxt').style.transform = "scale(1,1)";
-            });
+            document.getElementById('listTxt').style.display = "contents";
+            document.getElementById('listTxt').style.transform = "scale(1,1)";
+        });
         document.getElementById('amWatching').addEventListener("mouseout", function () {
-                document.getElementById('listTxt').style.display = "none";
-                document.getElementById('listTxt').style.transform = "scale(1,1)";
-            });
+            document.getElementById('listTxt').style.display = "none";
+            document.getElementById('listTxt').style.transform = "scale(1,1)";
+        });
 
         document.getElementById('seenIt').addEventListener("mouseover", function () {
-                document.getElementById('seentTxt').style.display = "contents";
-                document.getElementById('seentTxt').style.transform = "scale(1,1)";
-            });
-            document.getElementById('seenIt').addEventListener("mouseout", function () {
-                document.getElementById('seentTxt').style.display = "none";
-                document.getElementById('seentTxt').style.transform = "scale(1,1)";
-            });
+            document.getElementById('seentTxt').style.display = "contents";
+            document.getElementById('seentTxt').style.transform = "scale(1,1)";
+        });
+        document.getElementById('seenIt').addEventListener("mouseout", function () {
+            document.getElementById('seentTxt').style.display = "none";
+            document.getElementById('seentTxt').style.transform = "scale(1,1)";
+        });
 
 
         async function seen() {
             var seenBtn = document.getElementById('seenIt').style;
             seenBtn.background = "skyblue";
-            setTimeout(function(){seenBtn.background = "transparent";}, 300);
+            setTimeout(function () { seenBtn.background = "transparent"; }, 300);
 
             var mov = document.getElementById('movieTitle').style;
             mov.transform = "scale(0,0)";
@@ -298,7 +301,7 @@
 
         async function no() {
             document.getElementById('X').src = "tinderIcons/redX.png";
-            setTimeout(function(){ document.getElementById('X').src = "tinderIcons/blackX.png";}, 300);
+            setTimeout(function () { document.getElementById('X').src = "tinderIcons/blackX.png"; }, 300);
 
             var noBtn = document.getElementById('dislike').style;
             noBtn.background = "red";
@@ -317,7 +320,7 @@
 
         async function yes() {
             document.getElementById('heart').src = "tinderIcons/redheart.png";
-            setTimeout(function(){ document.getElementById('heart').src = "tinderIcons/blankheart.png";}, 300);
+            setTimeout(function () { document.getElementById('heart').src = "tinderIcons/blankheart.png"; }, 300);
 
             var yesBtn = document.getElementById('like').style;
             yesBtn.background = "#50C878";
@@ -342,7 +345,7 @@
         const genres = [null, 28, 12, 16, 35, 80, 99, 18, 10751, 14, 36, 27, 10402, 9648, 10749, 878, 10770, 53, 10752, 37];
         //const pgs = [null, 1902, 1039, 2458, 6200, 1537, 7092, 10149, 1207, 973, 757, 2233, 1830, 874, 2352, 919, 1131, 2080, 486, 419];
         const max_pgs = [null, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 486, 419];
-    
+
 
 
         async function randomMovie() {
@@ -390,7 +393,7 @@
             // else{ 
             //     blurb += "..";
             // }
-            
+
             document.getElementById('desc').innerHTML = blurb;
         }
 
