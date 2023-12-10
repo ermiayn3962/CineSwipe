@@ -15,21 +15,8 @@
       * {
         margin: 0px;
       }
-      /* header {
-        -webkit-box-align: center;
-        align-items: center;
-        box-shadow: rgba(0, 0, 0, 0) 0px 8px 24px;
-        display: flex;
-        height: 80px;
-        -webkit-box-pack: center;
-        justify-content: center;
-        position: sticky;
-        top: 0px;
-        width: 100vw;
-        z-index: 300;
-      } */
       body {
-        background-color: black;
+        background: linear-gradient(to top, black, rgb(255, 133, 153));
         margin: 0;
         padding: 0;
         font-family: Arial, sans-serif;
@@ -79,6 +66,9 @@
 
       h1 {
         color: white;
+        display: block;
+        margin: 10px;
+        font-size: 30px;
       }
 
       .movies-wrapper {
@@ -109,30 +99,6 @@
         text-align: center;
         color: white;
         margin: 10px;
-      }
-
-      #myModal {
-        color: black;
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        justify-content: center;
-        align-items: center;
-      }
-
-      .modal-content {
-        color: black;
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        max-width: 400px;
-        width: 100%;
-        text-align: center;
       }
 
       .close {
@@ -259,6 +225,79 @@
       .info {
         padding-top: 10px;
       }
+
+      /* Modal stuff*/
+
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: red;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      #streaming {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      #addToList {
+        background-color: #4caf50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+      #movieTitle {
+        font-size: 40px;
+        font-weight: 500;
+        font-kerning: normal;
+        color: #000;
+        text-align: left;
+      }
+      #closeModal {
+        position: absolute;
+        font-size: 48px;
+        top: 10px;
+        right: 10px;
+      }
+
+      #myModal {
+        color: black;
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: left;
+        align-items: left;
+      }
+
+      .modal-content {
+        color: black;
+        background: linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0.9),
+          rgba(255, 255, 255, 0)
+        );
+        padding: 20px;
+        max-width: 800px;
+        width: 100%;
+        text-align: center;
+      }
     </style>
   </head>
 
@@ -314,6 +353,17 @@
 
       async function openModal() {
         let movieId = $(this).data("id");
+        let movieName = $(this).data("name");
+        let movieBackground = $(this).data("background");
+
+        $("#movieTitle").text(movieName);
+        $("#myModal").css({
+          "background-image": "url(" + images_url + movieBackground + ")",
+          "background-size": "cover",
+          "background-position": "center center",
+          "background-repeat": "no-repeat",
+        });
+
         const providers = await getProviders(movieId);
         const usProviders = providers.results.US;
         try {
@@ -331,8 +381,6 @@
             });
             $("#streaming").append(img);
           });
-
-          // $("#streaming").text(streamingProviders.join(", "));
           $("#streaming").append("<br>");
         } catch (err) {
           $("#streaming").text("No streaming providers available");
@@ -426,6 +474,8 @@
               "background-repeat": "no-repeat",
             });
             $(this).attr("data-id", data.results[index].id);
+            $(this).attr("data-name", data.results[index].title);
+            $(this).attr("data-background", data.results[index].backdrop_path);
           }
         });
       }
@@ -451,13 +501,15 @@
 
     <div id="myModal">
       <div class="modal-content">
+        <h2 id="movieTitle"></h2>
         <span
           class="close"
           id="closeModal"
           >&times;
         </span>
-        <h2>Where to stream</h2>
+        <h2 class="stream-title">Where to stream</h2>
         <ul id="streaming"></ul>
+        <button id="addToList">Add to watchlist</button>
       </div>
     </div>
 
