@@ -1,12 +1,14 @@
 {
-  "name": "filmq",
+  "name": "cineswipe",
   "version": "1.0.0",
-  "description": "",
+  "description": "cineSwipe app",
   "main": "server.js",
   "scripts": {
-    "start" : "node server.js",
-    "server.js": "nodemon server.js",
-    "api.js": "nodemon api.js"
+    "start" : "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
   },
   "keywords": [],
   "author": "",
