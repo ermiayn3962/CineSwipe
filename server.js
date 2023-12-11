@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
     email : String,
     password : String,
     recs : [Number],
-    watchlist : [String]
+    watchlist : [Number]
 })
 
 const User = mongoose.model('User', userSchema);

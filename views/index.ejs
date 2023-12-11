@@ -405,11 +405,42 @@
 
       function openSidebar() {
         console.log(user.watchlist)
+        var watch_list = $('#your_queue');
+        console.log(watch_list)
+        user.watchlist.forEach(async (item) =>{
+            console.log(item)
+            let movieDatum = await getMovie(item)
+            // console.log(movieDatum)
 
-        // $('#your_queue')
-        // let info_list = $('<ul>');
+            let info_list = $('<ul>').addClass("info-list");
 
-        // let title = $('<li>').text()
+            let title = $('<li>').text(movieDatum.title).addClass("title");
+
+            let year = $('<li>').text(movieDatum.release_date).addClass("year")
+
+            var genre_name = "";
+            movieDatum.genres.forEach((item) => {
+                genre_name = genre_name +' ' + item.name
+            })
+            
+            let genre = $('<li>').text(genre_name).addClass("genre").append(title).append(year).append(genre_name)
+
+            let mini_column_info = $('<div>').addClass("mini-column info").append(info_list);
+            
+            let movie_img = $('<img>').addClass("thumbnail").attr("src", "")
+            let mini_column_pic = $('<div>').addClass('mini-column pic').append(movie_img)
+
+            let movie_cols = $('<div>').addClass("movie-cols").append(mini_column_pic).append(mini_column_info)
+
+            let movie_item = $('<div>').addClass("movie-item").append(movie_cols)
+
+            let wrapper = $('<li>').append(movie_item)
+            
+            watch_list.append(wrapper)
+        
+        })
+
+
 
 
         // <li>
@@ -436,7 +467,7 @@
         if (toggleStatus == "closed") {
           toggleStatus = "open";
         }
-      }
+    }
 
       function closeSidebar() {
         $("#sidebar").hide();
@@ -557,7 +588,7 @@
       <div id="empty"></div>
 
       <ul id="your-queue">
-        <li>
+        <!-- <li>
           <div class="movie-item">
             <div class="movie-cols">
               <div class="mini-column pic">
@@ -575,13 +606,61 @@
             </div>
             <div class="blurb"></div>
           </div>
-        </li>  
+        </li>   -->
     </ul>
     </div>
   </body>
   <script>
-    $("document").ready(()=> {
+    async function getRecommendation(movieID) {
 
-    })
+        /* Getting Current Recs for User from API */
+            const url = 'https://api.themoviedb.org/3/movie/' + movieID + '/recommendations?language=en-US&page=1';
+            const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: process.env.TMBD_API_KEY
+            
+            }
+            };
+            var currentRecs = user.recs
+
+            var data = await fetch(url, options)
+                .then(res => res.json())
+                .then(json => {
+                    // console.log(json)
+                    var data = json.results;
+                    data.forEach( async (item) => {
+                        currentRecs.push(await item.title);
+                    });
+
+                    return currentRecs
+                })
+                .catch(err => console.error('error:' + err))
+            
+            // console.log(data)
+            return data
+
+        }
+
+        /* Searching for movie */
+        async function getMovie(movie_id) {
+            const blurb_url =
+            "https://api.themoviedb.org/3/movie/" +
+            movie_id +
+            "?api_key=" +
+            tmdb_api_key +
+            "&language=en-US";
+
+            try {
+                let response = await fetch(blurb_url, options);
+                let data = await response.json();
+                // console.log(data);
+                return data;
+            } catch (err) {
+                console.error("error:" + err);
+            }
+        }
+
   </script>
 </html>
