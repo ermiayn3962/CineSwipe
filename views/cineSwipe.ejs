@@ -6,14 +6,14 @@
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
         * {
             z-index: 1;
-
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
-            background-image: url(https://raw.githubusercontent.com/ermiayn3962/FilmQ/main/views/tinderIcons/tinderBG.png?token=GHSAT0AAAAAACHGMNVKS4IJ66ZHWHQLJBX2ZLWHBSA);
-            background-image: url(https://marjon-journalism.shorthandstories.com/tinder-how-they-keep-you-swiping/assets/SgbRM44jay/tinder-gradient-2560x1440.png);
+            background-image: url(https://static.vecteezy.com/system/resources/previews/007/713/928/non_2x/pink-pastel-gradient-background-illustration-vector.jpg);
             background-repeat: no-repeat;
             background-size: cover;
         }
@@ -203,7 +203,7 @@
 </head>
 
 <body>
-    <div id="logo"><img src="../public/tinderIcons/cineswipe-logo.png" alt="logo here" id="logo_logo"></div>
+    <a href="/index.ejs"><div id="logo"><img src="../public/tinderIcons/cineswipe-logo.png" alt="logo here" id="logo_logo"></div></a>
     <div id="container">
 
         <div class="column" id="no_seen">
@@ -266,9 +266,7 @@
 
 
         async function seen() {
-            var seenBtn = document.getElementById('seenIt').style;
-            seenBtn.background = "skyblue";
-            setTimeout(function(){seenBtn.background = "transparent";}, 300);
+            
 
             var mov = document.getElementById('movieTitle').style;
             mov.transform = "scale(0,0)";
@@ -283,9 +281,7 @@
         }
 
         async function watching() {
-            var watchingBtn = document.getElementById('amWatching').style;
-            watchingBtn.background = "skyblue";
-            setTimeout(function () { watchingBtn.background = "transparent"; }, 300);
+            
 
             var mov = document.getElementById('movieTitle').style
             mov.transform = "scale(0,0)";
@@ -308,9 +304,7 @@
             document.getElementById('X').src = "../public/tinderIcons/redX.png";
             setTimeout(function(){ document.getElementById('X').src = "../public/tinderIcons/blackX.png";}, 300);
 
-            var noBtn = document.getElementById('dislike').style;
-            noBtn.background = "red";
-            setTimeout(function () { noBtn.background = "transparent"; }, 300);
+            
 
             var mov = document.getElementById('movieTitle').style
             mov.transform = "scale(0,0)";
@@ -327,9 +321,7 @@
             document.getElementById('heart').src = "../public/tinderIcons/redheart.png";
             setTimeout(function(){ document.getElementById('heart').src = "../public/tinderIcons/blankheart.png";}, 300);
 
-            var yesBtn = document.getElementById('like').style;
-            yesBtn.background = "#50C878";
-            setTimeout(function () { yesBtn.background = "transparent"; }, 300);
+            
 
             var mov = document.getElementById('movieTitle').style
             mov.transform = "scale(0,0)";
