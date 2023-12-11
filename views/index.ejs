@@ -6,6 +6,7 @@
       src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"></script>
+    <!-- <script src="homepage.js"></script> -->
     <style
       rel
       href="styles.css"></style>
@@ -22,11 +23,15 @@
       }
 
       header {
-        background-color: #333;
+        background-color: rgba(0, 0, 0, 0.4);
+        background-blend-mode: multiply;
         color: #fff;
-        padding: 15px;
         text-align: center;
-        position: relative;
+        position: fixed;
+        top: 0;
+        z-index: 1;
+        width: 100vw;
+        height: 10%;
       }
 
       .center-item {
@@ -56,6 +61,7 @@
         height: 700px;
         width: 100%;
         background-color: #00ffff67;
+        position: relative;
       }
 
       h2 {
@@ -139,6 +145,8 @@
         background-blend-mode: multiply;
         width: 250px;
         transition: all 0.2s;
+        z-index: 10;
+        display: none;
       }
 
       #x-out {
@@ -240,10 +248,21 @@
         text-decoration: none;
         cursor: pointer;
       }
+      .stream-title {
+        font-size: 30px;
+        font-weight: 100;
+        font-kerning: normal;
+        color: #fff;
+        margin-bottom: 10px;
+      }
 
       #streaming {
         list-style-type: none;
         padding: 0;
+        columns: 2;
+        -webkit-columns: 2;
+        -moz-columns: 2;
+        width: 300px;
       }
 
       #addToList {
@@ -253,17 +272,28 @@
         padding: 15px 32px;
         text-align: center;
         text-decoration: none;
-        display: inline-block;
         font-size: 16px;
-        margin: 4px 2px;
+        margin: 20px 10px;
         cursor: pointer;
+        border-radius: 5px; /* Rounded corners */
+        transition: background-color 0.3s ease; /* Smooth transition */
+
+        display: flex;
+      }
+
+      #addToList:hover {
+        background-color: #45a049; /* Darker green on hover */
       }
       #movieTitle {
-        font-size: 40px;
-        font-weight: 500;
+        font-size: 50px;
+        font-weight: 700; /* Make the font weight bolder */
         font-kerning: normal;
-        color: #000;
+        color: #ffffff; /* Darken the text color for better contrast */
         text-align: left;
+        line-height: 1.2; /* Improve readability by increasing line height */
+        margin-bottom: 20px; /* Add some space below the title */
+        text-transform: uppercase; /* Make the title uppercase */
+        letter-spacing: 1px; /* Add some spacing between letters */
       }
       #closeModal {
         position: absolute;
@@ -289,27 +319,124 @@
         color: black;
         background: linear-gradient(
           to right,
-          rgba(255, 255, 255, 0.9),
+          rgba(255, 141, 141, 0.9),
           rgba(255, 255, 255, 0)
         );
         padding: 20px;
-        max-width: 800px;
-        width: 100%;
+        width: 40%;
         text-align: center;
+      }
+      h2 {
+        color: black;
+        text-align: left;
+        display: block;
+        margin-top: 20px;
+      }
+      #streaming ul li {
+        display: block;
+      }
+      #modal-content ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      #streaming img {
+        display: block;
+        margin: 0%;
+        width: 100px;
+      }
+
+      #blurb {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 60%;
+        height: 25%;
+        justify-content: right;
+        align-items: right;
+        background: linear-gradient(
+          to left,
+          rgba(0, 0, 0, 0.7) 70%,
+          rgba(255, 255, 255, 0)
+        );
+      }
+      #blurb p {
+        font-size: 24px;
+        color: white;
+        text-align: left;
+        display: block;
+        margin-top: 0px;
+        padding: 20px;
+      }
+
+      .random-big-title {
+        font-size: 50px;
+        font-weight: 700;
+        font-kerning: normal;
+        color: #ffffff;
+        text-align: left;
+        line-height: 1.2;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: inline-block; /* Make the width fit the content */
+        max-width: 60%; /* Limit the maximum width to 60% of the parent element */
+        top: 0;
+        left: 0;
+        margin-top: 0px;
+        padding-left: 10px;
+        padding-top: 20px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+
+        background: linear-gradient(
+          to right,
+          rgba(255, 141, 141, 0.9),
+          rgba(255, 255, 255, 0)
+        );
+      }
+      .random-big-description {
+        width: 97.2%;
+        font-size: 24px;
+        color: white;
+        text-align: left;
+        display: block;
+        margin-top: 0px;
+        padding: 20px;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.7) 80%,
+          rgba(255, 255, 255, 0)
+        );
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        margin: 0px;
+        cursor: pointer;
+      }
+      .random-big {
+        cursor: pointer;
+      }
+      .random-big.greyed-out::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(128, 128, 128, 0.2); /* Semi-transparent grey */
       }
     </style>
   </head>
 
   <body>
     <header>
-      <h1 class="left-item">CineSwipe</h1>
-      <form class="center-item">
-        <input
-          type="text"
-          id="search"
-          name="search"
-          placeholder="Search" />
-      </form>
+      <h1 class="left-item"></h1>
+      <a class="center-item">
+        <img
+          id="logo"
+          alt="logo"
+          src="images/logo.png" />
+      </a>
       <div
         id="nav"
         class="right-item">
@@ -321,9 +448,10 @@
       </div>
     </header>
 
-    <section>
+    <section style="margin-top: 5.65%">
       <div class="random-big">
-        <h2>Random Movie</h2>
+        <h2 class="random-big-title"></h2>
+        <p class="random-big-description"></p>
       </div>
     </section>
 
@@ -345,13 +473,39 @@
     <script>
         var user = JSON.parse('<%-JSON.stringify(data)%>');
         console.log(user)
-
       $(() => {
         $(".movie").on("click", openModal);
         $("#closeModal").on("click", closeModal);
+        $("#addToList").on("click", addToList);
+        initBigImage();
       });
       const images_url = "https://image.tmdb.org/t/p/original/";
       const providers_images_url = "https://image.tmdb.org/t/p/original";
+      const tmdb_api_key = "e2978d1da72adcf778b7bc358679b035";
+      const popular_url =
+        "https://api.themoviedb.org/3/discover/movie?api_key=" +
+        tmdb_api_key +
+        "&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc";
+
+      const options = {
+        method: "GET",
+        headers: { accept: "application/json" },
+      };
+      var toggleStatus = "closed";
+
+      function addToList() {
+        const movieName = $("#movieName").text();
+        const backdrop = $("#myModal").css("background-image");
+
+        // Append the new li to the existing ul
+        $("#movieList").append(li);
+
+        closeModal();
+      }
+      async function openDescription(movieId) {
+        const blurb = await getBlurb(movieId);
+        $("#movieBlurb").text(blurb);
+      }
 
       async function openModal() {
         let movieId = $(this).data("id");
@@ -379,7 +533,7 @@
               `<img src="${providers_images_url}${provider.logo_path}">`
             );
             img.css({
-              width: "60px",
+              width: "90px",
             });
             $("#streaming").append(img);
           });
@@ -389,85 +543,25 @@
 
           console.log(err);
         }
+        await openDescription(movieId);
         $("#myModal").css({ display: "flex" });
+        $("#blurb").show();
+        $("header").hide();
       }
+
       function closeModal() {
         $("#streaming").empty();
         $("#myModal").hide();
-      }
-      var toggleStatus = "closed";
-
-      function setUp() {
-        //   setTimeout(function () {
-        //     zeroize();
-        //   }, 1500);
+        $("#blurb").hide();
+        $("header").show();
       }
 
       function openSidebar() {
-        console.log(user.watchlist)
-        var watch_list = $('#your_queue');
-        console.log(watch_list)
-        user.watchlist.forEach(async (item) =>{
-            console.log(item)
-            let movieDatum = await getMovie(item)
-            // console.log(movieDatum)
-
-            let info_list = $('<ul>').addClass("info-list");
-
-            let title = $('<li>').text(movieDatum.title).addClass("title");
-
-            let year = $('<li>').text(movieDatum.release_date).addClass("year")
-
-            var genre_name = "";
-            movieDatum.genres.forEach((item) => {
-                genre_name = genre_name +' ' + item.name
-            })
-            
-            let genre = $('<li>').text(genre_name).addClass("genre").append(title).append(year).append(genre_name)
-
-            let mini_column_info = $('<div>').addClass("mini-column info").append(info_list);
-            
-            let movie_img = $('<img>').addClass("thumbnail").attr("src", "")
-            let mini_column_pic = $('<div>').addClass('mini-column pic').append(movie_img)
-
-            let movie_cols = $('<div>').addClass("movie-cols").append(mini_column_pic).append(mini_column_info)
-
-            let movie_item = $('<div>').addClass("movie-item").append(movie_cols)
-
-            let wrapper = $('<li>').append(movie_item)
-            
-            watch_list.append(wrapper)
-        
-        })
-
-
-
-
-        // <li>
-        //   <div class="movie-item">
-        //     <div class="movie-cols">
-        //       <div class="mini-column pic">
-        //         <img
-        //           class="thumbnail"
-        //           src="images/totoro.jpg" />
-        //       </div>
-        //       <div class="mini-column info">
-        //         <ul class="info-list">
-        //           <li class="title"></li>
-        //           <li class="year"></li>
-        //           <li class="genre"></li>
-        //         </ul>
-        //       </div>
-        //     </div>
-        //     <div class="blurb"></div>
-        //   </div>
-        // </li>  
-
         $("#sidebar").show();
         if (toggleStatus == "closed") {
           toggleStatus = "open";
         }
-    }
+      }
 
       function closeSidebar() {
         $("#sidebar").hide();
@@ -475,18 +569,6 @@
           toggleStatus = "closed";
         }
       }
-
-      var tmdb_api_key = "e2978d1da72adcf778b7bc358679b035";
-
-      const options = {
-        method: "GET",
-        headers: { accept: "application/json" },
-      };
-
-      const popular_url =
-        "https://api.themoviedb.org/3/discover/movie?api_key=" +
-        tmdb_api_key +
-        "&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc";
 
       async function getPopular() {
         try {
@@ -497,6 +579,7 @@
           console.error("error:" + err);
         }
       }
+
       async function getProviders(movie_id) {
         const providers_url =
           "https://api.themoviedb.org/3/movie/" +
@@ -513,7 +596,26 @@
           console.error("error:" + err);
         }
       }
-      async function setBigImage() {
+
+      async function getBlurb(movie_id) {
+        const blurb_url =
+          "https://api.themoviedb.org/3/movie/" +
+          movie_id +
+          "?api_key=" +
+          tmdb_api_key +
+          "&language=en-US";
+
+        try {
+          let response = await fetch(blurb_url, options);
+          let data = await response.json();
+          console.log(data);
+          return data.overview;
+        } catch (err) {
+          console.error("error:" + err);
+        }
+      }
+
+      async function initBigImage() {
         let data = await getPopular();
         $(".random-big").css({
           "background-image":
@@ -522,7 +624,46 @@
           "background-position": "center center",
           "background-repeat": "no-repeat",
         });
+        $(".random-big-title").text(data.results[0].title);
+        $(".random-big-description").text(data.results[0].overview);
       }
+
+      let index = 1;
+      let intervalId; // Declare a variable to hold the interval ID
+      let isRunning = false; // Declare a flag to track whether the interval is running
+
+      async function setBigImage() {
+        let data = await getPopular();
+        intervalId = setInterval(function () {
+          $(".random-big").fadeOut(1000, function () {
+            // Fade out over 0.5 seconds
+            $(this).css({
+              "background-image":
+                "url(" + images_url + data.results[index].backdrop_path + ")",
+              "background-size": "cover",
+              "background-position": "center center",
+              "background-repeat": "no-repeat",
+            });
+            $(".random-big-title").text(data.results[index].title);
+            $(".random-big-description").text(data.results[index].overview);
+            $(this).fadeIn(500); // Fade in over 0.5 seconds
+          });
+
+          index = (index + 1) % data.results.length;
+          isRunning = true;
+        }, 5000);
+      }
+
+      $(".random-big").click(function () {
+        if (isRunning) {
+          clearInterval(intervalId);
+          isRunning = false;
+          $(this).addClass("greyed-out"); // Add the 'greyed-out' class when the interval stops
+        } else {
+          setBigImage();
+          $(this).removeClass("greyed-out"); // Remove the 'greyed-out' class when the interval starts
+        }
+      });
       async function setPopularMovies() {
         let data = await getPopular();
         $(".movie.popular").each(function (index) {
@@ -540,8 +681,11 @@
           }
         });
       }
+
       setBigImage();
+
       setPopularMovies();
+
       // setTinderMovies();
     </script>
 
@@ -568,10 +712,13 @@
           id="closeModal"
           >&times;
         </span>
-        <h2 class="stream-title">Where to stream</h2>
+        <h2 class="stream-title">Where to stream:</h2>
         <ul id="streaming"></ul>
         <button id="addToList">Add to watchlist</button>
       </div>
+    </div>
+    <div id="blurb">
+      <p id="movieBlurb"></p>
     </div>
 
     <!-- sidebar stuff -->
@@ -598,69 +745,68 @@
               </div>
               <div class="mini-column info">
                 <ul class="info-list">
-                  <li class="title"></li>
-                  <li class="year"></li>
-                  <li class="genre"></li>
+                  <li class="title">Totoro</li>
+                  <li class="year">1988</li>
+                  <li class="genre">Anime</li>
                 </ul>
               </div>
             </div>
-            <div class="blurb"></div>
+            <div class="blurb">
+              My Neighbor Totoro is a 1988 Japanese animated fantasy film
+              written and directed by Hayao Miyazaki and animated by Studio
+              Ghibli for Tokuma Shoten.
+            </div>
           </div>
-        </li>   -->
-    </ul>
+        </li>
+
+        <li>
+          <div class="movie-item">
+            <div class="movie-cols">
+              <div class="mini-column pic">
+                <img
+                  class="thumbnail"
+                  src="images/totoro.jpg" />
+              </div>
+              <div class="mini-column info">
+                <ul class="info-list">
+                  <li class="title">Totoro</li>
+                  <li class="year">1988</li>
+                  <li class="genre">Anime</li>
+                </ul>
+              </div>
+            </div>
+            <div class="blurb">
+              My Neighbor Totoro is a 1988 Japanese animated fantasy film
+              written and directed by Hayao Miyazaki and animated by Studio
+              Ghibli for Tokuma Shoten.
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <div class="movie-item">
+            <div class="movie-cols">
+              <div class="mini-column pic">
+                <img
+                  class="thumbnail"
+                  src="images/totoro.jpg" />
+              </div>
+              <div class="mini-column info">
+                <ul class="info-list">
+                  <li class="title">Totoro</li>
+                  <li class="year">1988</li>
+                  <li class="genre">Anime</li>
+                </ul>
+              </div>
+            </div>
+            <div class="blurb">
+              My Neighbor Totoro is a 1988 Japanese animated fantasy film
+              written and directed by Hayao Miyazaki and animated by Studio
+              Ghibli for Tokuma Shoten.
+            </div>
+          </div>
+        </li> -->
+      </ul>
     </div>
   </body>
-  <script>
-    async function getRecommendation(movieID) {
-
-        /* Getting Current Recs for User from API */
-            const url = 'https://api.themoviedb.org/3/movie/' + movieID + '/recommendations?language=en-US&page=1';
-            const options = {
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization: process.env.TMBD_API_KEY
-            
-            }
-            };
-            var currentRecs = user.recs
-
-            var data = await fetch(url, options)
-                .then(res => res.json())
-                .then(json => {
-                    // console.log(json)
-                    var data = json.results;
-                    data.forEach( async (item) => {
-                        currentRecs.push(await item.title);
-                    });
-
-                    return currentRecs
-                })
-                .catch(err => console.error('error:' + err))
-            
-            // console.log(data)
-            return data
-
-        }
-
-        /* Searching for movie */
-        async function getMovie(movie_id) {
-            const blurb_url =
-            "https://api.themoviedb.org/3/movie/" +
-            movie_id +
-            "?api_key=" +
-            tmdb_api_key +
-            "&language=en-US";
-
-            try {
-                let response = await fetch(blurb_url, options);
-                let data = await response.json();
-                // console.log(data);
-                return data;
-            } catch (err) {
-                console.error("error:" + err);
-            }
-        }
-
-  </script>
 </html>
