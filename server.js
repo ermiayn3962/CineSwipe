@@ -11,6 +11,7 @@ const session = require('express-session');
 const methodOverride = require('method-override')
 const path = require('path');
 const cineSwipe = require('./api.js')
+const PORT = process.env.PORT || 3000;
 
 /* Connecting to database */
 async function connect() {
@@ -186,4 +187,4 @@ app.post('/api/updateUser', async (req, res) => {
     res.send(updated_user)
 })
 
-app.listen(3000, () => console.log("Server starting on port 3000"))
+app.listen(PORT, () => console.log("Server starting on port" + PORT))
