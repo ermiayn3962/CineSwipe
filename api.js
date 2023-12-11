@@ -3,8 +3,6 @@ require('dotenv').config()
 const mongoose = require('mongoose');
 
 
-
-
 async function getRecommendation(movieID, user) {
 
   /* Getting Current Recs for User from API */
