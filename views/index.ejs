@@ -471,7 +471,7 @@
       $(() => {
         $('.movie').on('click', openModal);
         $('#closeModal').on('click', closeModal);
-        $('#addToList').on('click', addToList);
+        $('#addToList').on('click', addToWatchList);
         $('#icon').on('click', openSidebar);
         initBigImage();
       });
@@ -488,11 +488,27 @@
         headers: { accept: 'application/json' },
       };
 
-      async function addToList() {
+      async function addToWatchList() {
         const movieId = $('#myModal').data('id');
         let movieData = await getMovieById(movieId);
         $('#your-queue').append(createWatchListHtml(movieData));
+        user.watchlist.push(movieData.id);
+        user = await updateUserInfo(user);
+        console.log(user);
         closeModal();
+      }
+      async function updateUserInfo(user) {
+        console.log('data to be sent back', user);
+        var data = await fetch('api/updateUser', {
+          method: 'POST',
+          body: JSON.stringify(user),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }).then((res) => res.json());
+
+        console.log('data received', data);
+        return data;
       }
       async function openDescription(movieId) {
         const blurb = await getBlurb(movieId);
@@ -627,6 +643,7 @@
         for (let movieID of user.watchlist) {
           arr.push(await getMovieById(movieID));
         }
+
         console.log(arr);
         return arr;
       }
