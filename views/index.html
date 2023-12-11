@@ -23,11 +23,15 @@
       }
 
       header {
-        background-color: #333;
+        background-color: rgba(0, 0, 0, 0.4);
+        background-blend-mode: multiply;
         color: #fff;
-        padding: 15px;
         text-align: center;
-        position: relative;
+        position: fixed;
+        top: 0;
+        z-index: 1;
+        width: 100vw;
+        height: 10%;
       }
 
       .center-item {
@@ -141,6 +145,8 @@
         background-blend-mode: multiply;
         width: 250px;
         transition: all 0.2s;
+        z-index: 10;
+        display: none;
       }
 
       #x-out {
@@ -401,8 +407,8 @@
           rgba(0, 0, 0, 0.7) 80%,
           rgba(255, 255, 255, 0)
         );
-        position: absolute; /* Set the position to absolute */
-        bottom: 0; /* Position it at the bottom of the parent div */
+        position: absolute;
+        bottom: 0;
         left: 0;
         margin: 0px;
         cursor: pointer;
@@ -424,14 +430,13 @@
 
   <body>
     <header>
-      <h1 class="left-item">FilmQ</h1>
-      <form class="center-item">
-        <input
-          type="text"
-          id="search"
-          name="search"
-          placeholder="Search" />
-      </form>
+      <h1 class="left-item"></h1>
+      <a class="center-item">
+        <img
+          id="logo"
+          alt="logo"
+          src="images/logo.png" />
+      </a>
       <div
         id="nav"
         class="right-item">
@@ -443,7 +448,7 @@
       </div>
     </header>
 
-    <section>
+    <section style="margin-top: 5.65%">
       <div class="random-big">
         <h2 class="random-big-title"></h2>
         <p class="random-big-description"></p>
@@ -539,12 +544,14 @@
         await openDescription(movieId);
         $("#myModal").css({ display: "flex" });
         $("#blurb").show();
+        $("header").hide();
       }
 
       function closeModal() {
         $("#streaming").empty();
         $("#myModal").hide();
         $("#blurb").hide();
+        $("header").show();
       }
 
       function openSidebar() {
@@ -619,7 +626,6 @@
         $(".random-big-description").text(data.results[0].overview);
       }
 
-
       let index = 1;
       let intervalId; // Declare a variable to hold the interval ID
       let isRunning = false; // Declare a flag to track whether the interval is running
@@ -627,19 +633,23 @@
       async function setBigImage() {
         let data = await getPopular();
         intervalId = setInterval(function () {
-          $(".random-big").css({
-            "background-image":
-              "url(" + images_url + data.results[index].backdrop_path + ")",
-            "background-size": "cover",
-            "background-position": "center center",
-            "background-repeat": "no-repeat",
+          $(".random-big").fadeOut(1000, function () {
+            // Fade out over 0.5 seconds
+            $(this).css({
+              "background-image":
+                "url(" + images_url + data.results[index].backdrop_path + ")",
+              "background-size": "cover",
+              "background-position": "center center",
+              "background-repeat": "no-repeat",
+            });
+            $(".random-big-title").text(data.results[index].title);
+            $(".random-big-description").text(data.results[index].overview);
+            $(this).fadeIn(500); // Fade in over 0.5 seconds
           });
-          $(".random-big-title").text(data.results[index].title);
-          $(".random-big-description").text(data.results[index].overview);
 
           index = (index + 1) % data.results.length;
           isRunning = true;
-        }, 3000);
+        }, 5000);
       }
 
       $(".random-big").click(function () {
