@@ -5,11 +5,10 @@
     <script
       src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-      crossorigin="anonymous"></script>
+      crossorigin="anonymous"
+    ></script>
     <!-- <script src="homepage.js"></script> -->
-    <style
-      rel
-      href="styles.css"></style>
+    <style rel href="styles.css"></style>
 
     <style>
       * {
@@ -140,10 +139,10 @@
         padding: 15px;
         border-radius: 5px;
         float: right;
-        background-image: url("images/theater.jpg");
-        background-color: rgba(0, 0, 0, 0.5);
+        background-image: url('images/theater.jpg');
+        background-color: rgba(0, 0, 0, 0.9);
         background-blend-mode: multiply;
-        width: 250px;
+        width: 25%;
         transition: all 0.2s;
         z-index: 10;
         display: none;
@@ -210,12 +209,12 @@
       }
 
       .blurb {
-        width: 220px;
+        width: 100%;
         padding-top: 4px;
         padding-bottom: 4px;
         padding-left: 5px;
         padding-right: 5px;
-        text-align: center;
+        text-align: left;
         font-size: 0px;
         border-bottom: 4px dotted white;
       }
@@ -417,7 +416,7 @@
         cursor: pointer;
       }
       .random-big.greyed-out::after {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         right: 0;
@@ -432,19 +431,15 @@
     <header>
       <h1 class="left-item"></h1>
       <a class="center-item">
-        <img
-          id="logo"
-          alt="logo"
-          src="images/logo.png" />
+        <img id="logo" alt="logo" src="images/logo.png" />
       </a>
-      <div
-        id="nav"
-        class="right-item">
+      <div id="nav" class="right-item">
         <img
           id="icon"
           alt="burger menu"
           src="images/burger-menu.svg"
-          onclick="openSidebar()" />
+          onclick="openSidebar()"
+        />
       </div>
     </header>
 
@@ -471,54 +466,66 @@
     </section>
 
     <script>
-        var user = JSON.parse('<%-JSON.stringify(data)%>');
-        // var recommendedMovies = [];
-        console.log(user)
+      var user = JSON.parse('<%-JSON.stringify(data)%>');
+      console.log(user);
       $(() => {
-        $(".movie").on("click", openModal);
-        $("#closeModal").on("click", closeModal);
-        $("#addToList").on("click", addToList);
+        $('.movie').on('click', openModal);
+        $('#closeModal').on('click', closeModal);
+        $('#addToList').on('click', addToWatchList);
+        $('#icon').on('click', openSidebar);
         initBigImage();
       });
-      const images_url = "https://image.tmdb.org/t/p/original/";
-      const providers_images_url = "https://image.tmdb.org/t/p/original";
-      const tmdb_api_key = "e2978d1da72adcf778b7bc358679b035";
+      const images_url = 'https://image.tmdb.org/t/p/original/';
+      const providers_images_url = 'https://image.tmdb.org/t/p/original';
+      const tmdb_api_key = 'e2978d1da72adcf778b7bc358679b035';
       const popular_url =
-        "https://api.themoviedb.org/3/discover/movie?api_key=" +
+        'https://api.themoviedb.org/3/discover/movie?api_key=' +
         tmdb_api_key +
-        "&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc";
+        '&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc';
 
       const options = {
-        method: "GET",
-        headers: { accept: "application/json" },
+        method: 'GET',
+        headers: { accept: 'application/json' },
       };
-      var toggleStatus = "closed";
 
-      function addToList() {
-        const movieName = $("#movieName").text();
-        const backdrop = $("#myModal").css("background-image");
-
-        // Append the new li to the existing ul
-        $("#movieList").append(li);
-
+      async function addToWatchList() {
+        const movieId = $('#myModal').data('id');
+        let movieData = await getMovieById(movieId);
+        $('#your-queue').append(createWatchListHtml(movieData));
+        user.watchlist.push(movieData.id);
+        user = await updateUserInfo(user);
+        console.log(user);
         closeModal();
+      }
+      async function updateUserInfo(user) {
+        console.log('data to be sent back', user);
+        var data = await fetch('api/updateUser', {
+          method: 'POST',
+          body: JSON.stringify(user),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }).then((res) => res.json());
+
+        console.log('data received', data);
+        return data;
       }
       async function openDescription(movieId) {
         const blurb = await getBlurb(movieId);
-        $("#movieBlurb").text(blurb);
+        $('#movieBlurb').text(blurb);
       }
 
       async function openModal() {
-        let movieId = $(this).data("id");
-        let movieName = $(this).data("name");
-        let movieBackground = $(this).data("background");
+        let movieId = $(this).data('id');
+        let movieName = $(this).data('name');
+        let movieBackground = $(this).data('background');
 
-        $("#movieTitle").text(movieName);
-        $("#myModal").css({
-          "background-image": "url(" + images_url + movieBackground + ")",
-          "background-size": "cover",
-          "background-position": "center center",
-          "background-repeat": "no-repeat",
+        $('#movieTitle').text(movieName);
+        $('#myModal').css({
+          'background-image': 'url(' + images_url + movieBackground + ')',
+          'background-size': 'cover',
+          'background-position': 'center center',
+          'background-repeat': 'no-repeat',
         });
 
         const providers = await getProviders(movieId);
@@ -534,41 +541,37 @@
               `<img src="${providers_images_url}${provider.logo_path}">`
             );
             img.css({
-              width: "90px",
+              width: '90px',
             });
-            $("#streaming").append(img);
+            $('#streaming').append(img);
           });
-          $("#streaming").append("<br>");
+          $('#streaming').append('<br>');
         } catch (err) {
-          $("#streaming").text("No streaming providers available");
+          $('#streaming').text('No streaming providers available');
 
           console.log(err);
         }
         await openDescription(movieId);
-        $("#myModal").css({ display: "flex" });
-        $("#blurb").show();
-        $("header").hide();
+        $('#myModal').css({ display: 'flex' });
+        $('#myModal').data('id', movieId);
+        $('#blurb').show();
+        $('header').hide();
+        closeSidebar();
       }
 
       function closeModal() {
-        $("#streaming").empty();
-        $("#myModal").hide();
-        $("#blurb").hide();
-        $("header").show();
+        $('#streaming').empty();
+        $('#myModal').hide();
+        $('#blurb').hide();
+        $('header').show();
       }
 
       function openSidebar() {
-        $("#sidebar").show();
-        if (toggleStatus == "closed") {
-          toggleStatus = "open";
-        }
+        $('#sidebar').show();
       }
 
       function closeSidebar() {
-        $("#sidebar").hide();
-        if (toggleStatus == "open") {
-          toggleStatus = "closed";
-        }
+        $('#sidebar').hide();
       }
 
       async function getPopular() {
@@ -577,7 +580,7 @@
           let data = await response.json();
           return data;
         } catch (err) {
-          console.error("error:" + err);
+          console.error('error:' + err);
         }
       }
 
@@ -627,9 +630,9 @@
 
       async function getProviders(movie_id) {
         const providers_url =
-          "https://api.themoviedb.org/3/movie/" +
+          'https://api.themoviedb.org/3/movie/' +
           movie_id +
-          "/watch/providers?api_key=" +
+          '/watch/providers?api_key=' +
           tmdb_api_key;
 
         try {
@@ -638,41 +641,95 @@
           console.log(data);
           return data;
         } catch (err) {
-          console.error("error:" + err);
+          console.error('error:' + err);
         }
       }
 
-      async function getBlurb(movie_id) {
+      async function getMovieById(movie_id) {
         const blurb_url =
-          "https://api.themoviedb.org/3/movie/" +
+          'https://api.themoviedb.org/3/movie/' +
           movie_id +
-          "?api_key=" +
+          '?api_key=' +
           tmdb_api_key +
-          "&language=en-US";
+          '&language=en-US';
 
         try {
           let response = await fetch(blurb_url, options);
           let data = await response.json();
           console.log(data);
-          return data.overview;
+          return data;
         } catch (err) {
-          console.error("error:" + err);
+          console.error('error:' + err);
         }
+      }
+      async function getBlurb(movie_id) {
+        return await getMovieById(movie_id).then((data) => {
+          return data.overview;
+        });
       }
 
       async function initBigImage() {
         let data = await getPopular();
-        $(".random-big").css({
-          "background-image":
-            "url(" + images_url + data.results[0].backdrop_path + ")",
-          "background-size": "cover",
-          "background-position": "center center",
-          "background-repeat": "no-repeat",
+        $('.random-big').css({
+          'background-image':
+            'url(' + images_url + data.results[0].backdrop_path + ')',
+          'background-size': 'cover',
+          'background-position': 'center center',
+          'background-repeat': 'no-repeat',
         });
-        $(".random-big-title").text(data.results[0].title);
-        $(".random-big-description").text(data.results[0].overview);
+        $('.random-big-title').text(data.results[0].title);
+        $('.random-big-description').text(data.results[0].overview);
       }
 
+      async function getWatchListMovies() {
+        const arr = [];
+
+        for (let movieID of user.watchlist) {
+          arr.push(await getMovieById(movieID));
+        }
+
+        console.log(arr);
+        return arr;
+      }
+
+      function createWatchListHtml(movie) {
+        return `
+            <li>
+              <div class="movie-item">
+                <div class="movie-cols">
+                  <div class="mini-column pic">
+                    <img class="thumbnail" src="${
+                      images_url + movie.poster_path
+                    }" />
+                  </div>
+                  <div class="mini-column info">
+                    <ul class="info-list">
+                      <li class="title">${movie.title}</li>
+                      <li class="year">${movie.release_date.substring(
+                        0,
+                        4
+                      )}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="blurb">
+                  ${movie.overview}
+                </div>
+              </div>
+            </li>
+          `;
+      }
+
+      async function setWatchList() {
+        let data = await getWatchListMovies();
+        console.log(data);
+
+        for (let movie of data) {
+          let movieHTML = createWatchListHtml(movie);
+
+          $('#your-queue').append(movieHTML);
+        }
+      }
       let index = 1;
       let intervalId; // Declare a variable to hold the interval ID
       let isRunning = false; // Declare a flag to track whether the interval is running
@@ -680,17 +737,17 @@
       async function setBigImage() {
         let data = await getPopular();
         intervalId = setInterval(function () {
-          $(".random-big").fadeOut(1000, function () {
+          $('.random-big').fadeOut(1000, function () {
             // Fade out over 0.5 seconds
             $(this).css({
-              "background-image":
-                "url(" + images_url + data.results[index].backdrop_path + ")",
-              "background-size": "cover",
-              "background-position": "center center",
-              "background-repeat": "no-repeat",
+              'background-image':
+                'url(' + images_url + data.results[index].backdrop_path + ')',
+              'background-size': 'cover',
+              'background-position': 'center center',
+              'background-repeat': 'no-repeat',
             });
-            $(".random-big-title").text(data.results[index].title);
-            $(".random-big-description").text(data.results[index].overview);
+            $('.random-big-title').text(data.results[index].title);
+            $('.random-big-description').text(data.results[index].overview);
             $(this).fadeIn(500); // Fade in over 0.5 seconds
           });
 
@@ -699,30 +756,30 @@
         }, 5000);
       }
 
-      $(".random-big").click(function () {
+      $('.random-big').click(function () {
         if (isRunning) {
           clearInterval(intervalId);
           isRunning = false;
-          $(this).addClass("greyed-out"); // Add the 'greyed-out' class when the interval stops
+          $(this).addClass('greyed-out'); // Add the 'greyed-out' class when the interval stops
         } else {
           setBigImage();
-          $(this).removeClass("greyed-out"); // Remove the 'greyed-out' class when the interval starts
+          $(this).removeClass('greyed-out'); // Remove the 'greyed-out' class when the interval starts
         }
       });
       async function setPopularMovies() {
         let data = await getPopular();
-        $(".movie.popular").each(function (index) {
+        $('.movie.popular').each(function (index) {
           if (index < data.results.length) {
             $(this).css({
-              "background-image":
-                "url(" + images_url + data.results[index].poster_path + ")",
-              "background-size": "cover",
-              "background-position": "center center",
-              "background-repeat": "no-repeat",
+              'background-image':
+                'url(' + images_url + data.results[index].poster_path + ')',
+              'background-size': 'cover',
+              'background-position': 'center center',
+              'background-repeat': 'no-repeat',
             });
-            $(this).attr("data-id", data.results[index].id);
-            $(this).attr("data-name", data.results[index].title);
-            $(this).attr("data-background", data.results[index].backdrop_path);
+            $(this).attr('data-id', data.results[index].id);
+            $(this).attr('data-name', data.results[index].title);
+            $(this).attr('data-background', data.results[index].backdrop_path);
           }
         });
       }
@@ -799,8 +856,8 @@ async function getMovie(movie_id) {
     setYouPicks();
 
       setBigImage();
-
       setPopularMovies();
+      setWatchList();
 
       // setTinderMovies();
     </script>
@@ -823,11 +880,7 @@ async function getMovie(movie_id) {
     <div id="myModal">
       <div class="modal-content">
         <h2 id="movieTitle"></h2>
-        <span
-          class="close"
-          id="closeModal"
-          >&times;
-        </span>
+        <span class="close" id="closeModal">&times; </span>
         <h2 class="stream-title">Where to stream:</h2>
         <ul id="streaming"></ul>
         <button id="addToList">Add to watchlist</button>
@@ -840,18 +893,18 @@ async function getMovie(movie_id) {
     <!-- sidebar stuff -->
 
     <div id="sidebar">
-      <div
-        id="x-out"
-        onclick="closeSidebar()">
-        &#x2715;
-      </div>
+      <div id="x-out" onclick="closeSidebar()">&#x2715;</div>
 
       <div id="subheader">Your Watchlist</div>
 
       <div id="empty"></div>
 
-      <ul id="your-queue">
-        <!-- <li>
+      <ul id="your-queue"></ul>
+    </div>
+  </body>
+</html>
+
+<!-- <li>
           <div class="movie-item">
             <div class="movie-cols">
               <div class="mini-column pic">
@@ -922,7 +975,3 @@ async function getMovie(movie_id) {
             </div>
           </div>
         </li> -->
-      </ul>
-    </div>
-  </body>
-</html>
