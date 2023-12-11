@@ -67,124 +67,128 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method'))
+
+app.get('/', (req, res) => {
+    res.send("works")
+})
     
-/* Post Routes */
-app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
-    successRedirect: '/homepage-intermediary',
-    failureRedirect: '/login',
-    failureFlash: true
-}))
+// /* Post Routes */
+// app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
+//     successRedirect: '/homepage-intermediary',
+//     failureRedirect: '/login',
+//     failureFlash: true
+// }))
 
 
-// Adding user information to database
-app.post('/signup', checkNotAuthenticated, async (req, res) => {
-    try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+// // Adding user information to database
+// app.post('/signup', checkNotAuthenticated, async (req, res) => {
+//     try {
+//         const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-        const data = new User({
-            id: parseFloat(Date.now().toString()),
-            name: req.body.name,
-            email: req.body.email,
-            password: hashedPassword,
-            recs: [],
-            watchlist: []
-        })
+//         const data = new User({
+//             id: parseFloat(Date.now().toString()),
+//             name: req.body.name,
+//             email: req.body.email,
+//             password: hashedPassword,
+//             recs: [],
+//             watchlist: []
+//         })
 
-        /* Checking if user already exists */
-        user = await User.findOne({email : data.email});
+//         /* Checking if user already exists */
+//         user = await User.findOne({email : data.email});
 
-        if (user == null) {
+//         if (user == null) {
 
-            db.collection('users').insertOne(data, (error, collection) => {
-                if (error) {
-                   console.log(error)
-                } else {
-                    console.log("User inserted to DB successfully");
+//             db.collection('users').insertOne(data, (error, collection) => {
+//                 if (error) {
+//                    console.log(error)
+//                 } else {
+//                     console.log("User inserted to DB successfully");
 
-                }
-            });
-        } else {
-            req.flash('error', 'User already exists');
+//                 }
+//             });
+//         } else {
+//             req.flash('error', 'User already exists');
             
-        }
-        res.redirect('/login')
-    } catch {
-        res.redirect('/signup')
-    }
-})
+//         }
+//         res.redirect('/login')
+//     } catch {
+//         res.redirect('/signup')
+//     }
+// })
 
 
-/* Get Routes */
-app.get('/', checkAuthenticated, async (req, res) => {
-    let user = await req.user
+// /* Get Routes */
+// app.get('/', checkAuthenticated, async (req, res) => {
+//     let user = await req.user
 
-    res.render('index', {data : user})
-})
+//     res.render('index', {data : user})
+// })
 
-app.get('/homepage-intermediary', checkAuthenticated, async (req, res) => {
-    let user = await req.user
+// app.get('/homepage-intermediary', checkAuthenticated, async (req, res) => {
+//     let user = await req.user
 
-    if (user.recs.length == 0) {
-        res.redirect('/cineSwipe')
-    } else {
-        res.redirect('/')
-    }
-})
+//     if (user.recs.length == 0) {
+//         res.redirect('/cineSwipe')
+//     } else {
+//         res.redirect('/')
+//     }
+// })
 
-app.get('/login', checkNotAuthenticated, (req, res) => {
-    if (res.locals.message) {
-        res.render('login', {message: res.locals.message})
-    } else {
-        res.render('login')
-    }
-})
+// app.get('/login', checkNotAuthenticated, (req, res) => {
+//     if (res.locals.message) {
+//         res.render('login', {message: res.locals.message})
+//     } else {
+//         res.render('login')
+//     }
+// })
 
-app.get('/signup', checkNotAuthenticated, (req, res) => {
-    res.render('signup')
-})
-app.get('/cineSwipe', checkAuthenticated, async (req, res) => {
-    let user = await req.user
-    // console.log("data going to pass", JSON.stringify(user))
-    res.render('cineSwipe', {data : user})
-})
+// app.get('/signup', checkNotAuthenticated, (req, res) => {
+//     res.render('signup')
+// })
+// app.get('/cineSwipe', checkAuthenticated, async (req, res) => {
+//     let user = await req.user
+//     // console.log("data going to pass", JSON.stringify(user))
+//     res.render('cineSwipe', {data : user})
+// })
 
-app.delete('/logout', (req, res) => {
-    req.logOut((err) => {
-        if (err) {
-            console.log(err)
-        } else {
+// app.delete('/logout', (req, res) => {
+//     req.logOut((err) => {
+//         if (err) {
+//             console.log(err)
+//         } else {
 
-            res.redirect('/login')
-        }
-    })
-})
+//             res.redirect('/login')
+//         }
+//     })
+// })
 
 
-/* Functions */
-function checkAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next()
-    }
+// /* Functions */
+// function checkAuthenticated(req, res, next) {
+//     if (req.isAuthenticated()) {
+//         return next()
+//     }
 
-    res.redirect('/login')
-}
+//     res.redirect('/login')
+// }
 
-function checkNotAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return res.redirect('/')
-    }
+// function checkNotAuthenticated(req, res, next) {
+//     if (req.isAuthenticated()) {
+//         return res.redirect('/')
+//     }
     
-    next()
-}
+//     next()
+// }
 
-app.post('/api/updateUser', async (req, res) => {
-    let user = await req.body
-    console.log ("this is the param", user)
-    console.log(user.email)
+// app.post('/api/updateUser', async (req, res) => {
+//     let user = await req.body
+//     console.log ("this is the param", user)
+//     console.log(user.email)
 
-    await User.updateOne({email: user.email}, user)
-    let updated_user = await User.findOne({email: user.email})
-    res.send(updated_user)
-})
+//     await User.updateOne({email: user.email}, user)
+//     let updated_user = await User.findOne({email: user.email})
+//     res.send(updated_user)
+// })
 
 app.listen(PORT, () => console.log("Server starting on port" + PORT))
