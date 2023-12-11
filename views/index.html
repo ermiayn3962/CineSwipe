@@ -57,6 +57,7 @@
         height: 700px;
         width: 100%;
         background-color: #00ffff67;
+        position: relative;
       }
 
       h2 {
@@ -241,10 +242,21 @@
         text-decoration: none;
         cursor: pointer;
       }
+      .stream-title {
+        font-size: 30px;
+        font-weight: 100;
+        font-kerning: normal;
+        color: #fff;
+        margin-bottom: 10px;
+      }
 
       #streaming {
         list-style-type: none;
         padding: 0;
+        columns: 2;
+        -webkit-columns: 2;
+        -moz-columns: 2;
+        width: 300px;
       }
 
       #addToList {
@@ -254,17 +266,28 @@
         padding: 15px 32px;
         text-align: center;
         text-decoration: none;
-        display: inline-block;
         font-size: 16px;
-        margin: 4px 2px;
+        margin: 20px 10px;
         cursor: pointer;
+        border-radius: 5px; /* Rounded corners */
+        transition: background-color 0.3s ease; /* Smooth transition */
+
+        display: flex;
+      }
+
+      #addToList:hover {
+        background-color: #45a049; /* Darker green on hover */
       }
       #movieTitle {
-        font-size: 40px;
-        font-weight: 500;
+        font-size: 50px;
+        font-weight: 700; /* Make the font weight bolder */
         font-kerning: normal;
-        color: #000;
+        color: #ffffff; /* Darken the text color for better contrast */
         text-align: left;
+        line-height: 1.2; /* Improve readability by increasing line height */
+        margin-bottom: 20px; /* Add some space below the title */
+        text-transform: uppercase; /* Make the title uppercase */
+        letter-spacing: 1px; /* Add some spacing between letters */
       }
       #closeModal {
         position: absolute;
@@ -290,13 +313,111 @@
         color: black;
         background: linear-gradient(
           to right,
-          rgba(255, 255, 255, 0.9),
+          rgba(255, 141, 141, 0.9),
           rgba(255, 255, 255, 0)
         );
         padding: 20px;
-        max-width: 800px;
-        width: 100%;
+        width: 40%;
         text-align: center;
+      }
+      h2 {
+        color: black;
+        text-align: left;
+        display: block;
+        margin-top: 20px;
+      }
+      #streaming ul li {
+        display: block;
+      }
+      #modal-content ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      #streaming img {
+        display: block;
+        margin: 0%;
+        width: 100px;
+      }
+
+      #blurb {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 60%;
+        height: 25%;
+        justify-content: right;
+        align-items: right;
+        background: linear-gradient(
+          to left,
+          rgba(0, 0, 0, 0.7) 70%,
+          rgba(255, 255, 255, 0)
+        );
+      }
+      #blurb p {
+        font-size: 24px;
+        color: white;
+        text-align: left;
+        display: block;
+        margin-top: 0px;
+        padding: 20px;
+      }
+
+      .random-big-title {
+        font-size: 50px;
+        font-weight: 700;
+        font-kerning: normal;
+        color: #ffffff;
+        text-align: left;
+        line-height: 1.2;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: inline-block; /* Make the width fit the content */
+        max-width: 60%; /* Limit the maximum width to 60% of the parent element */
+        top: 0;
+        left: 0;
+        margin-top: 0px;
+        padding-left: 10px;
+        padding-top: 20px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+
+        background: linear-gradient(
+          to right,
+          rgba(255, 141, 141, 0.9),
+          rgba(255, 255, 255, 0)
+        );
+      }
+      .random-big-description {
+        width: 97.2%;
+        font-size: 24px;
+        color: white;
+        text-align: left;
+        display: block;
+        margin-top: 0px;
+        padding: 20px;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.7) 80%,
+          rgba(255, 255, 255, 0)
+        );
+        position: absolute; /* Set the position to absolute */
+        bottom: 0; /* Position it at the bottom of the parent div */
+        left: 0;
+        margin: 0px;
+        cursor: pointer;
+      }
+      .random-big {
+        cursor: pointer;
+      }
+      .random-big.greyed-out::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(128, 128, 128, 0.2); /* Semi-transparent grey */
       }
     </style>
   </head>
@@ -324,7 +445,8 @@
 
     <section>
       <div class="random-big">
-        <h2>Random Movie</h2>
+        <h2 class="random-big-title"></h2>
+        <p class="random-big-description"></p>
       </div>
     </section>
 
@@ -347,9 +469,36 @@
       $(() => {
         $(".movie").on("click", openModal);
         $("#closeModal").on("click", closeModal);
+        $("#addToList").on("click", addToList);
+        initBigImage();
       });
       const images_url = "https://image.tmdb.org/t/p/original/";
       const providers_images_url = "https://image.tmdb.org/t/p/original";
+      const tmdb_api_key = "e2978d1da72adcf778b7bc358679b035";
+      const popular_url =
+        "https://api.themoviedb.org/3/discover/movie?api_key=" +
+        tmdb_api_key +
+        "&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc";
+
+      const options = {
+        method: "GET",
+        headers: { accept: "application/json" },
+      };
+      var toggleStatus = "closed";
+
+      function addToList() {
+        const movieName = $("#movieName").text();
+        const backdrop = $("#myModal").css("background-image");
+
+        // Append the new li to the existing ul
+        $("#movieList").append(li);
+
+        closeModal();
+      }
+      async function openDescription(movieId) {
+        const blurb = await getBlurb(movieId);
+        $("#movieBlurb").text(blurb);
+      }
 
       async function openModal() {
         let movieId = $(this).data("id");
@@ -377,7 +526,7 @@
               `<img src="${providers_images_url}${provider.logo_path}">`
             );
             img.css({
-              width: "60px",
+              width: "90px",
             });
             $("#streaming").append(img);
           });
@@ -387,18 +536,15 @@
 
           console.log(err);
         }
+        await openDescription(movieId);
         $("#myModal").css({ display: "flex" });
+        $("#blurb").show();
       }
+
       function closeModal() {
         $("#streaming").empty();
         $("#myModal").hide();
-      }
-      var toggleStatus = "closed";
-
-      function setUp() {
-        //   setTimeout(function () {
-        //     zeroize();
-        //   }, 1500);
+        $("#blurb").hide();
       }
 
       function openSidebar() {
@@ -415,18 +561,6 @@
         }
       }
 
-      var tmdb_api_key = "e2978d1da72adcf778b7bc358679b035";
-
-      const options = {
-        method: "GET",
-        headers: { accept: "application/json" },
-      };
-
-      const popular_url =
-        "https://api.themoviedb.org/3/discover/movie?api_key=" +
-        tmdb_api_key +
-        "&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc";
-
       async function getPopular() {
         try {
           let response = await fetch(popular_url, options);
@@ -436,6 +570,7 @@
           console.error("error:" + err);
         }
       }
+
       async function getProviders(movie_id) {
         const providers_url =
           "https://api.themoviedb.org/3/movie/" +
@@ -452,7 +587,26 @@
           console.error("error:" + err);
         }
       }
-      async function setBigImage() {
+
+      async function getBlurb(movie_id) {
+        const blurb_url =
+          "https://api.themoviedb.org/3/movie/" +
+          movie_id +
+          "?api_key=" +
+          tmdb_api_key +
+          "&language=en-US";
+
+        try {
+          let response = await fetch(blurb_url, options);
+          let data = await response.json();
+          console.log(data);
+          return data.overview;
+        } catch (err) {
+          console.error("error:" + err);
+        }
+      }
+
+      async function initBigImage() {
         let data = await getPopular();
         $(".random-big").css({
           "background-image":
@@ -461,7 +615,43 @@
           "background-position": "center center",
           "background-repeat": "no-repeat",
         });
+        $(".random-big-title").text(data.results[0].title);
+        $(".random-big-description").text(data.results[0].overview);
       }
+
+
+      let index = 1;
+      let intervalId; // Declare a variable to hold the interval ID
+      let isRunning = false; // Declare a flag to track whether the interval is running
+
+      async function setBigImage() {
+        let data = await getPopular();
+        intervalId = setInterval(function () {
+          $(".random-big").css({
+            "background-image":
+              "url(" + images_url + data.results[index].backdrop_path + ")",
+            "background-size": "cover",
+            "background-position": "center center",
+            "background-repeat": "no-repeat",
+          });
+          $(".random-big-title").text(data.results[index].title);
+          $(".random-big-description").text(data.results[index].overview);
+
+          index = (index + 1) % data.results.length;
+          isRunning = true;
+        }, 3000);
+      }
+
+      $(".random-big").click(function () {
+        if (isRunning) {
+          clearInterval(intervalId);
+          isRunning = false;
+          $(this).addClass("greyed-out"); // Add the 'greyed-out' class when the interval stops
+        } else {
+          setBigImage();
+          $(this).removeClass("greyed-out"); // Remove the 'greyed-out' class when the interval starts
+        }
+      });
       async function setPopularMovies() {
         let data = await getPopular();
         $(".movie.popular").each(function (index) {
@@ -479,8 +669,11 @@
           }
         });
       }
+
       setBigImage();
+
       setPopularMovies();
+
       // setTinderMovies();
     </script>
 
@@ -507,10 +700,13 @@
           id="closeModal"
           >&times;
         </span>
-        <h2 class="stream-title">Where to stream</h2>
+        <h2 class="stream-title">Where to stream:</h2>
         <ul id="streaming"></ul>
         <button id="addToList">Add to watchlist</button>
       </div>
+    </div>
+    <div id="blurb">
+      <p id="movieBlurb"></p>
     </div>
 
     <!-- sidebar stuff -->
@@ -527,7 +723,7 @@
       <div id="empty"></div>
 
       <ul id="your-queue">
-        <li>
+        <!-- <li>
           <div class="movie-item">
             <div class="movie-cols">
               <div class="mini-column pic">
@@ -597,7 +793,7 @@
               Ghibli for Tokuma Shoten.
             </div>
           </div>
-        </li>
+        </li> -->
       </ul>
     </div>
   </body>
