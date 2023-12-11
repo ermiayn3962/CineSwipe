@@ -31,7 +31,6 @@
             color: #fff;
             max-width: 400px;
             
-            
             text-align: center;
             transition: 0.1s;
         }
@@ -111,8 +110,7 @@
 /*----------------------------------------------------------------------------*/
         #logo {
             width: 100vw;
-            height: 10vh;
-            height: 10vh;
+            height: 120px;
             justify-content: center;
             text-align: center;
             background: transparent;
@@ -121,7 +119,10 @@
         #logo_logo {
             margin-top: 5px;
             margin-bottom: 5px;
-            max-height: 77px;
+            max-height: 120px;
+            z-index: -2;
+            top: 0;
+            position: relative;
         }
 
         #container {
@@ -145,7 +146,6 @@
             justify-content: center;
             position: relative;
             z-index: -1;
-            
             
         }
 
@@ -203,7 +203,7 @@
 </head>
 
 <body>
-    <div id="logo"><img src="" alt="logo here" id="logo_logo"></div>
+    <div id="logo"><img src="tinderIcons/cineswipe-logo.png" alt="logo here" id="logo_logo"></div>
     <div id="container">
        
         <div class="column" id="no_seen">
@@ -231,7 +231,7 @@
 
 
     <script>
-        /*left column*/
+        var user = JSON.parse('<%-JSON.stringify(data)%>');
         /*left column*/
         document.getElementById('poster').addEventListener("mouseover", function () {
             document.getElementById('desc').style.display = "contents";
@@ -293,6 +293,11 @@
             image.border = "none";
             setTimeout(image.transform = "revert", 100);
             setTimeout(mov.transform = "revert", 100);
+
+            user.watchlist.push(movieDatum.id)
+            console.log(user);
+            user = await updateUserInfo(user);
+            console.log("this is the data passed from updateUser", user)
         }
 
 
@@ -332,6 +337,11 @@
             image.border = "none";
             setTimeout(image.transform = "revert", 100);
             setTimeout(mov.transform = "revert", 100);
+
+            user.recs.push(movieDatum.id)
+            console.log(user);
+            user = await updateUserInfo(user);
+            console.log("this is the data passed from updateUser", user)
 
 
         }
@@ -392,9 +402,26 @@
             // }
             
             document.getElementById('desc').innerHTML = blurb;
+
+            return movieDatum
         }
 
         document.addEventListener("load", get_info());
+        async function updateUserInfo (user) {
+            console.log("data to be sent back", user)
+            var data = await fetch("api/updateUser", {
+                method: 'POST',
+                body: JSON.stringify(user),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            // .then(json => console.log("data sent back", json))
+            
+            console.log("data received", data)
+            return data;
+        }
     </script>
 </body>
 
