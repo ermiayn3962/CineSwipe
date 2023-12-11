@@ -203,12 +203,12 @@
 </head>
 
 <body>
-    <a href="/index.ejs"><div id="logo"><img src="../public/tinderIcons/cineswipe-logo.png" alt="logo here" id="logo_logo"></div></a>
+    <a href="/index.ejs"><div id="logo"><img src="tinderIcons/cineswipe-logo.png" alt="logo here" id="logo_logo"></div></a>
     <div id="container">
 
         <div class="column" id="no_seen">
-            <button class="buttons" id="dislike" onclick="no()"><img id="X" src="../public/tinderIcons/blackX.png"></button>
-            <button class="buttons" id="seenIt" onclick="seen()"><img id="seent" src="../public/tinderIcons/glasses.png">
+            <button class="buttons" id="dislike" onclick="no()"><img id="X" src="tinderIcons/blackX.png"></button>
+            <button class="buttons" id="seenIt" onclick="seen()"><img id="seent" src="tinderIcons/glasses.png">
                 <div id="seentTxt"><br>already seen</div>
             </button>
         </div>
@@ -226,8 +226,8 @@
 
 
         <div class="column" id="yes_watching">
-            <button class="buttons" id="like" onclick="yes()"><img id="heart" src="../public/tinderIcons/blankheart.png"></button>
-            <button class="buttons" id="amWatching" onclick="watching()"><img id="queue" src="../public/tinderIcons/list.png">
+            <button class="buttons" id="like" onclick="yes()"><img id="heart" src="tinderIcons/blankheart.png"></button>
+            <button class="buttons" id="amWatching" onclick="watching()"><img id="queue" src="tinderIcons/list.png">
                 <div id="listTxt"><br>add to list</div>
             </button>
         </div>
@@ -301,8 +301,8 @@
 
 
         async function no() {
-            document.getElementById('X').src = "../public/tinderIcons/redX.png";
-            setTimeout(function(){ document.getElementById('X').src = "../public/tinderIcons/blackX.png";}, 300);
+            document.getElementById('X').src = "tinderIcons/redX.png";
+            setTimeout(function(){ document.getElementById('X').src = "tinderIcons/blackX.png";}, 300);
 
             
 
@@ -318,8 +318,8 @@
         }
 
         async function yes() {
-            document.getElementById('heart').src = "../public/tinderIcons/redheart.png";
-            setTimeout(function(){ document.getElementById('heart').src = "../public/tinderIcons/blankheart.png";}, 300);
+            document.getElementById('heart').src = "tinderIcons/redheart.png";
+            setTimeout(function(){ document.getElementById('heart').src = "tinderIcons/blankheart.png";}, 300);
 
             
 
