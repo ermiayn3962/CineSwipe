@@ -10,12 +10,14 @@
             z-index: 1;
 
         }
+
         body {
             background-image: url(https://raw.githubusercontent.com/ermiayn3962/FilmQ/main/views/tinderIcons/tinderBG.png?token=GHSAT0AAAAAACHGMNVKS4IJ66ZHWHQLJBX2ZLWHBSA);
             background-image: url(https://marjon-journalism.shorthandstories.com/tinder-how-they-keep-you-swiping/assets/SgbRM44jay/tinder-gradient-2560x1440.png);
             background-repeat: no-repeat;
             background-size: cover;
         }
+
         #poster {
             max-height: 500px;
             max-width: 350px;
@@ -30,7 +32,7 @@
             z-index: -1;
             color: #fff;
             max-width: 400px;
-            
+
             text-align: center;
             transition: 0.1s;
         }
@@ -38,7 +40,7 @@
         #movieTitle {
             font-size: 25px;
             font-weight: 600;
-            
+
             padding: 5px;
         }
 
@@ -57,7 +59,7 @@
         }
 
         #heart,
-        #X, 
+        #X,
         #queue,
         #seent {
             transition: 0.2s ease-in-out;
@@ -82,11 +84,11 @@
             transform: scale(1.05, 1.05);
         }
 
-        
+
 
         #poster {
             transition: 0.3s;
-            
+
             border-radius: 10px;
             border: 2px solid rgba(255, 255, 255, 0.1);
         }
@@ -103,11 +105,12 @@
             display: inline-block;
             justify-content: center;
         }
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/*------------------------------three column layout---------------------------*/
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
+
+        /*----------------------------------------------------------------------------*/
+        /*----------------------------------------------------------------------------*/
+        /*------------------------------three column layout---------------------------*/
+        /*----------------------------------------------------------------------------*/
+        /*----------------------------------------------------------------------------*/
         #logo {
             width: 100vw;
             height: 120px;
@@ -116,10 +119,11 @@
             background: transparent;
             /* background-color: #FFB6C1; */
         }
+
         #logo_logo {
             margin-top: 5px;
             margin-bottom: 5px;
-            max-height: 120px;
+            max-height: 110px;
             z-index: -2;
             top: 0;
             position: relative;
@@ -127,13 +131,13 @@
 
         #container {
             position: relative;
-            margin: 0 auto; 
+            margin: 0 auto;
             width: 100vw;
             height: 90vh;
             background: transparent;
         }
 
-        .column{
+        .column {
             float: left;
         }
 
@@ -146,7 +150,7 @@
             justify-content: center;
             position: relative;
             z-index: -1;
-            
+
         }
 
         #yes_watching {
@@ -155,7 +159,7 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            
+
         }
 
         #no_seen {
@@ -164,7 +168,7 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            
+
         }
 
         .buttons {
@@ -186,16 +190,12 @@
             font-weight: 600;
         }
 
-        #listTxt, #seentTxt{
+        #listTxt,
+        #seentTxt {
             display: none;
             text-align: center;
             font-weight: 300;
         }
-
-        
-        
-
-
     </style>
     <!--<script src="./tinder.js">
             
@@ -205,15 +205,17 @@
 <body>
     <div id="logo"><img src="../public/tinderIcons/cineswipe-logo.png" alt="logo here" id="logo_logo"></div>
     <div id="container">
-       
+
         <div class="column" id="no_seen">
             <button class="buttons" id="dislike" onclick="no()"><img id="X" src="../public/tinderIcons/blackX.png"></button>
-            <button class="buttons" id="seenIt" onclick="seen()"><img id="seent" src="../public/tinderIcons/glasses.png"><div id="seentTxt"><br>already seen</div></button>
+            <button class="buttons" id="seenIt" onclick="seen()"><img id="seent" src="../public/tinderIcons/glasses.png">
+                <div id="seentTxt"><br>already seen</div>
+            </button>
         </div>
 
-        
+
         <div class="column" id="card">
-            
+
             <img id="poster" src="">
             <label id="movieTitle" for="poster"></label>
             <div id="desc_wrapper">
@@ -222,13 +224,14 @@
             <p id="allInfo"></p>
         </div>
 
-        
+
         <div class="column" id="yes_watching">
             <button class="buttons" id="like" onclick="yes()"><img id="heart" src="../public/tinderIcons/blankheart.png"></button>
-            <button class="buttons" id="amWatching" onclick="watching()"><img id="queue" src="../public/tinderIcons/list.png"><div id="listTxt"><br>add to list</div></button>
+            <button class="buttons" id="amWatching" onclick="watching()"><img id="queue" src="../public/tinderIcons/list.png">
+                <div id="listTxt"><br>add to list</div>
+            </button>
         </div>
     </div>
-
 
     <script>
         var user = JSON.parse('<%-JSON.stringify(data)%>');
