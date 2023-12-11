@@ -5,8 +5,7 @@
   "main": "server.js",
   "scripts": {
     "server.js": "nodemon server.js",
-    "api.js": "nodemon api.js",
-    "app.js": "nodemon app.js"
+    "api.js": "nodemon api.js"
   },
   "keywords": [],
   "author": "",

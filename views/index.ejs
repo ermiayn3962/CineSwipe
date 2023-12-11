@@ -471,6 +471,8 @@
     </section>
 
     <script>
+        var user = JSON.parse('<%-JSON.stringify(data)%>');
+        console.log(user)
       $(() => {
         $(".movie").on("click", openModal);
         $("#closeModal").on("click", closeModal);

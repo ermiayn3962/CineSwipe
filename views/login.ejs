@@ -11,7 +11,7 @@
     <body>
 
         <div class="wrapper">
-            <form action="http://localhost:3000/api/login" method="post">
+            <form action="/login" method="post">
                 <h1>Login</h1>
                 <div class="input-box">
                     <label for="email">Email</label>
@@ -21,9 +21,12 @@
                     <label for="password">Password</label>
                     <input class="input" type="password" id="password" name="password" required placeholder="********" />
                 </div>
+                <div id="errorMessage" style="margin-bottom: 10px;">
+                    <%= message.error %>
+                </div>
                 <button class="btn" type="submit">Login</button>
             </form>
-            <a href="./signup.html" class="alr"><br>I don't have an account yet</a>
+            <a href="/signup" class="alr"><br>I don't have an account yet</a>
         </div>
     </body>
 
