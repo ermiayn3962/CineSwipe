@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('express-flash');
 const session = require('express-session');
+const methodOverride = require('method-override')
 const path = require('path');
 const cineSwipe = require('./api.js')
 
@@ -64,9 +65,10 @@ app.use((req, res, next) => {
 })
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(methodOverride('_method'))
     
 /* Post Routes */
-app.post('/login', passport.authenticate('local', {
+app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
     successRedirect: '/homepage-intermediary',
     failureRedirect: '/login',
     failureFlash: true
@@ -74,7 +76,7 @@ app.post('/login', passport.authenticate('local', {
 
 
 // Adding user information to database
-app.post('/signup', async (req, res) => {
+app.post('/signup', checkNotAuthenticated, async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
@@ -112,13 +114,13 @@ app.post('/signup', async (req, res) => {
 
 
 /* Get Routes */
-app.get('/', async (req, res) => {
+app.get('/', checkAuthenticated, async (req, res) => {
     let user = await req.user
 
     res.render('index', {data : user})
 })
 
-app.get('/homepage-intermediary', async (req, res) => {
+app.get('/homepage-intermediary', checkAuthenticated, async (req, res) => {
     let user = await req.user
 
     if (user.recs.length == 0) {
@@ -128,7 +130,7 @@ app.get('/homepage-intermediary', async (req, res) => {
     }
 })
 
-app.get('/login', (req, res) => {
+app.get('/login', checkNotAuthenticated, (req, res) => {
     if (res.locals.message) {
         res.render('login', {message: res.locals.message})
     } else {
@@ -136,18 +138,43 @@ app.get('/login', (req, res) => {
     }
 })
 
-app.get('/signup', (req, res) => {
+app.get('/signup', checkNotAuthenticated, (req, res) => {
     res.render('signup')
 })
-app.get('/cineSwipe', async (req, res) => {
+app.get('/cineSwipe', checkAuthenticated, async (req, res) => {
     let user = await req.user
     // console.log("data going to pass", JSON.stringify(user))
     res.render('cineSwipe', {data : user})
 })
 
+app.delete('/logout', (req, res) => {
+    req.logOut((err) => {
+        if (err) {
+            console.log(err)
+        } else {
+
+            res.redirect('/login')
+        }
+    })
+})
 
 
 /* Functions */
+function checkAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next()
+    }
+
+    res.redirect('/login')
+}
+
+function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return res.redirect('/')
+    }
+    
+    next()
+}
 
 app.post('/api/updateUser', async (req, res) => {
     let user = await req.body

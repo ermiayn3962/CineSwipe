@@ -36,16 +36,20 @@
       .center-item {
         display: inline-block;
       }
-
-      .left-item,
+      .center-item img {
+        height: 85px;
+      }
+      
+      .left-item ,
       .right-item {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
       }
 
-      .left-item {
-        left: 15px;
+      .left-item img {
+        height : 80px;
+
       }
       #search {
         color: red;
@@ -117,7 +121,7 @@
       /* popup stuff */
       #nav {
         height: 80px;
-        border: 1px solid black;
+        /* border: 1px solid black; */
       }
 
       #icon {
@@ -133,7 +137,7 @@
       }
 
       #sidebar {
-        position: absolute;
+        position: fixed;
         top: 0;
         right: 0;
         padding: 15px;
@@ -429,15 +433,18 @@
 
   <body>
     <header>
-      <h1 class="left-item"></h1>
+        <a style="position: absolute; left: 15px;" href="/cineSwipe" class="left-item">
+        <img id="logo2" alt="logo" src="tinderIcons/cards.png" />
+      </a>
+
       <a class="center-item">
-        <img id="logo" alt="logo" src="images/logo.png" />
+        <img id="logo" alt="logo" src="tinderIcons/cineswipe-logo.png" />
       </a>
       <div id="nav" class="right-item">
         <img
           id="icon"
           alt="burger menu"
-          src="images/burger-menu.svg"
+          src="tinderIcons/list.png"
           onclick="openSidebar()"
         />
       </div>
@@ -786,7 +793,7 @@
 
     async function setYouPicks() {
         let data = await getRecommended();
-        // console.log(data)
+        console.log(data)
         let indices = getRandomNumbers(parseInt(data.length))
         // console.log(indices)
         // var yourMovies = []
@@ -900,6 +907,12 @@ async function getMovie(movie_id) {
       <div id="empty"></div>
 
       <ul id="your-queue"></ul>
+
+      <div id="logout">
+        <form action="/logout?_method=DELETE" method="POST">
+          <button type="submit">Log Out</button>
+        </form>
+      </div>
     </div>
   </body>
 </html>
