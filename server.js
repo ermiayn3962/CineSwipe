@@ -3,7 +3,7 @@ require('dotenv').config({path: __dirname + '/.env'});
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('express-flash');
