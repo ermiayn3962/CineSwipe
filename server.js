@@ -68,7 +68,6 @@ app.use(passport.session());
 /* Post Routes */
 app.post('/login', passport.authenticate('local', {
     successRedirect: '/homepage-intermediary',
-    // successRedirect: '/cineSwipe',
     failureRedirect: '/login',
     failureFlash: true
 }))
