@@ -173,7 +173,6 @@ app.post("/api/signup", async (req, res) => {
 /* Post Routes */
 app.post('/login', passport.authenticate('local', {
     successRedirect: '/homepage-intermediary',
-    // successRedirect: '/cineSwipe',
     failureRedirect: '/login',
     failureFlash: true
 }))
