@@ -1,14 +1,11 @@
 {
   "name": "cineswipe",
   "version": "1.0.0",
-  "description": "cineSwipe app",
+  "description": "",
   "main": "server.js",
   "scripts": {
-    "start" : "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": ""
+    "server.js": "nodemon server.js",
+    "api.js": "nodemon api.js"
   },
   "keywords": [],
   "author": "",
